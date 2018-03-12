@@ -27,6 +27,7 @@ public class QuickRun extends SpringBootServletInitializer {
 		System.out.println ( "--------------fap platform " + Version.getVersionString () + " started------------" );
 		System.out.println ( "========================================================================" );
 		System.out.println ( "------------------------------------------------------------------------" );
+		System.out.println ( "------------------------------------------------------------------------" );
 	}
 
 	protected SpringApplicationBuilder configure ( SpringApplicationBuilder builder ) {
