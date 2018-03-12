@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+    <title>Document</title>
+    <!-- font icon -->
+    <link rel="stylesheet" href="../../libs/font-welkin/css/iconfont.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../../libs/bootstrap/3.3.4/css/bootstrap.css">
+
+    <!-- plugins stylesheets -->
+    <link rel="stylesheet" href="../../libs/zTree/3.5.27/css/zTreeStyle/zTreeStyle.css">
+
+    <!-- welkin stylesheet -->
+    <link rel="stylesheet" href="../styles/app.css">
+
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+<!-- body -->
+<section class="main-fullscreen-nonav">
+    <div class="container-fluid menu-manage plan-config">
+
+        <div class="menu-mask"></div>
+
+        <div class="wlk-grail">
+
+            <!-- 具体内容 -->
+            <section class="wlk-container" id="menumanage-content">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="btn-group menu-manage-btn">
+                            单独任务200
+                        </div>
+                    </div>
+                    <div class="panel-body js-result-container" data-height="auto">
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-hover data-tb">
+                                <thead>
+                                <tr>
+                                    <th>参数名</th>
+                                    <th>参数值</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>资源类型</td>
+                                    <td>本地文件路径</td>
+                                </tr>
+                                <tr>
+                                    <td>是否忽略错误</td>
+                                    <td>否</td>
+                                </tr>
+                                <tr>
+                                    <td>重试次数</td>
+                                    <td>3</td>
+                                </tr>
+                                <tr>
+                                    <td>创建人</td>
+                                    <td>王海江</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 侧边栏树 -->
+            <aside class="wlk-aside" id="menumanage-aside">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <form class="form-inline" role="form" action="">
+                            <div class="form-group">
+                                <input class="form-control input-sm tree-search" type="text" placeholder="请输入关键字">
+                                <button class="tree-btn tree-search-btn"></button>
+                                <button class="tree-btn tree-unfold-btn"></button>
+                                <button class="tree-btn tree-fold-btn"></button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tree-container js-tree-container" data-height="auto">
+
+                        <div class="tree-area ztree">
+                        </div>
+
+
+                        <button class="fold-btn" id="fold-btn">
+                            <i class="iconfont icon-lfarrow"></i>
+                        </button>
+                    </div>
+
+                    <!--根节点 右击-->
+                    <div class="root-menu">
+                        <div class="fist-menu menu-box">
+                            <ul class="tree-menu list-group">
+                                <li class="list-group-item">
+                                    新增
+                                    <div class="secod-menu menu-box">
+                                        <ul class="tree-menu list-group">
+                                            <li class="list-group-item">
+                                                作业
+                                                <div class="thid-menu menu-box">
+                                                    <ul class="tree-menu list-group">
+                                                        <li class="list-group-item">Kjb</li>
+                                                        <li class="list-group-item">Ktr</li>
+                                                        <li class="list-group-item">DataStage</li>
+                                                        <li class="list-group-item">Shell</li>
+                                                        <li class="list-group-item">Bat</li>
+                                                        <li class="list-group-item">Http接口</li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">并行</li>
+                                            <li class="list-group-item">串行</li>
+                                            <li class="list-group-item">计划</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!--子节点右击-->
+                    <div class="child-menu">
+                        <div class="fist-menu menu-box">
+                            <ul class="tree-menu list-group">
+                                <li class="list-group-item">
+                                    新增_前
+                                    <div class="secod-menu menu-box">
+                                        <ul class="tree-menu list-group">
+                                            <li class="list-group-item">
+                                                作业
+                                                <div class="thid-menu menu-box">
+                                                    <ul class="tree-menu list-group">
+                                                        <li class="list-group-item">Kjb</li>
+                                                        <li class="list-group-item">Ktr</li>
+                                                        <li class="list-group-item">DataStage</li>
+                                                        <li class="list-group-item">Shell</li>
+                                                        <li class="list-group-item">Bat</li>
+                                                        <li class="list-group-item">Http接口</li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">并行</li>
+                                            <li class="list-group-item">串行</li>
+                                            <li class="list-group-item">计划</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    新增后
+                                    <div class="secod-menu menu-box">
+                                        <ul class="tree-menu list-group">
+                                            <li class="list-group-item">
+                                                作业
+                                                <div class="thid-menu menu-box">
+                                                    <ul class="tree-menu list-group">
+                                                        <li class="list-group-item">Kjb</li>
+                                                        <li class="list-group-item">Ktr</li>
+                                                        <li class="list-group-item">DataStage</li>
+                                                        <li class="list-group-item">Shell</li>
+                                                        <li class="list-group-item">Bat</li>
+                                                        <li class="list-group-item">Http接口</li>
+                                                    </ul>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item">并行</li>
+                                            <li class="list-group-item">串行</li>
+                                            <li class="list-group-item">计划</li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="list-group-item tree-modify">
+                                    修改
+                                </li>
+                                <li class="list-group-item">
+                                    删除
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </aside>
+
+        </div>
+
+    </div>
+</section>
+
+<!--菜单右键修改-->
+<div class="modal-modify" style="display: none">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">名称：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">运行参数：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">日期格式：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4 " >是否忽略错误：</label>
+                <div class="col-sm-18">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle form-control dpn-btn" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                            <span class="dpn-tip">否</span>
+                            <span class="caret crt-rgt"></span>
+                        </button>
+                        <ul class="dropdown-menu col-sm-24 sel-val test" role="menu" aria-labelledby="dropdownMenu1">
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">是</a></li>
+                            <li role="presentation"><a role="menuitem" tabindex="-1" href="#">否</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">失败重试次数：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">失败重试时间(s)：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">文件路径：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">
+                    内存初始时间(M)：
+                </label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">内存最大值(M)：</label>
+                <div class="col-sm-18">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+
+</div>
+
+<!--js-->
+<script src="../../libs/jquery/1.9.1/jquery.js"></script>
+<script src="../../libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="../../libs/layer/layer.js"></script>
+<script src="../../libs/zTree/3.5.27/js/jquery.ztree.core.js"></script>
+<script src="../main.js"></script>
+
+<script>
+    $(function () {
+        //修改弹出框
+        $('.tree-modify').on('click', function () {
+            $('.fist-menu').hide();
+            layer.open({
+                type: 1,
+                title: "计划配置",
+                area: "566px",
+                content: $(".modal-modify"),
+                btn: ["确定","关闭"],
+                yes: function (index) {
+                    layer.close(index);
+                    addOne();
+                    layer.alert("修改成功",{icon:2,btn:["确认","取消"],yes:function(index){
+                        layer.close(index);
+                    }});
+                }
+            });
+        })
+
+        //table tr 选中
+        $('.data-tb tbody tr').on('click', function () {
+            $(this).addClass('data-avtive').siblings().removeClass('data-avtive');
+        });
+
+        //获取鼠标位置
+        function mousePosition(ev) {
+            ev = ev || window.event;
+            if (ev.pageX || ev.pageY) {
+                return {
+                    x:ev.pageX,
+                    y:ev.pageY
+                };
+            }
+            return {
+                x:ev.clientX+document.body.scrollLeft-document.body.clientLeft,
+                y:ev.clientY+document.body.scrollTop-document.body.clientTop
+            };
+        }
+
+        //zTree使用
+        var zTreeObj;
+        var setting = {
+
+            //右键
+            callback: {
+                onRightClick: rgClick
+            }
+        };
+
+        //树节点右击
+        function rgClick(e, treeId, treeNode) {
+            var mousePos = mousePosition(e);
+            console.log('x:'+mousePos.x+',y:'+mousePos.y);
+            var xOffset = 25;
+            var yOffset = 40;
+            if (treeNode.isParent) {
+                $('.root-menu .fist-menu').show().css({
+                    position:'absolute',
+                    top:mousePos.y-yOffset+'px',
+                    left:mousePos.x+'px'
+                });
+                $('.menu-mask').show();
+            } else {
+                $('.child-menu .fist-menu').show().css({
+                    position:'absolute',
+                    top:mousePos.y+'px',
+                    left:mousePos.x+'px'
+                });;
+                $('.menu-mask').show();
+            }
+        };
+
+        //选择树右键菜单 li 颜色
+        $('.tree-menu .list-group-item').on('click', function () {
+            $(this).addClass('active-li').siblings().removeClass('active-li');
+        });
+
+        //鼠标经过出现子菜单
+        $('.tree-menu .list-group-item').on({
+            mouseover:function () {
+                $(this).children('.menu-box').show();
+            },
+            mouseleave:function () {
+                $(this).children('.menu-box').hide();
+            }
+        })
+
+        $('.menu-mask').on('click', function () {
+            $('.menu-mask').hide();
+            $('.fist-menu').hide();
+        });
+
+        $(window).on('scroll', function () {
+            $('.fist-menu').hide();
+        });
+
+
+        var zNodes = [
+            {
+                name: 'test1',
+                open: false,
+                children: [
+                    {name: 'test1_1'},
+                    {name: 'test1_2'}
+                ]
+            },
+            {
+                name: 'test2',
+                open: false,
+                children: [
+                    {name: 'test2_1'},
+                    {name: 'test2_2'}
+                ]
+            }
+        ];
+
+
+        zTreeObj = $.fn.zTree.init($('.ztree'), setting, zNodes);
+
+
+        $('[data-height="auto"]').each(function () {
+            var parent = $(this).parent();
+            var bro = $(this).siblings();
+            var broHeight = 0;
+            $(bro).each(function () {
+                var everyHeight = $(this).outerHeight();
+                broHeight += everyHeight;
+            });
+            $(this).css({
+                'box-sizing': 'border-box',
+                'width': '100%',
+                'height': parent.height() - broHeight,
+                'overflow-y': 'auto',
+                'overflow-x': 'hidden'
+            })
+        });
+
+        $(document).on('click', '#fold-btn', foldAside);
+
+
+        // 收缩侧边栏方法
+        var toggle = true;
+
+        function foldAside() {
+            var root = $(this).parents('.wlk-grail');
+
+            if (toggle) {
+                toggle = false;
+                $(this).html('<i class="iconfont icon-rtarrow"></i>');
+                root.animate({
+                    'padding-left': '30px'
+                })
+            } else {
+                toggle = true;
+                $(this).html('<i class="iconfont icon-lfarrow"></i>');
+                root.animate({
+                    'padding-left': '230px'
+                })
+
+            }
+
+        }
+    })
+</script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>计划配置</title>
+	#set($breadcrumb="<li>计划配置</li>")
+	#parse("common/top-share-code-core.vm")
+	#parse("common/top-share-code-welkin.vm")
+	<link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+	<link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+	<link rel="stylesheet"
+		  href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-select/1.12.1/css/bootstrap-select.css"/>
+	<link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+	<link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+	<link rel="stylesheet" href="${rc.contextPath}/libs/stree/ui-tree.css">
+	<!--[if lt IE 9]>
+	<script src="../../libs/html5shiv.min.js"></script>
+	<script src="../../libs/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+<body>
+<!-- header -->
+	#parse("common/page-header-nav.vm")
+
+##	#set($noticeWays=${DicTools.getDics("planconfig.noticeway")})
+<!-- body -->
+<section class="main ">
+	<div class="container-fluid tsp">
+		<div class="wlk-top">
+			<!--查询条件-->
+			<div class="row">
+				<form class="form-horizontal " action="" method="post" name="query_form">
+					<div class="row row-ise">
+						<div class="col-sm-7 ">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">计划名称:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+								<input class=" form-control input-sm" type="text" name="name" id="name_qo" placeholder="" value="$!{planConfigQo.name}">
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务启动起始时间:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+								<input class=" form-control input-sm dtpicker" type="text" name="startTimeBelow" id="startTimeBelow_qo" placeholder="请选择" value="$!{planConfigQo.startTimeBelow}">
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务启动终止时间:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+								<input class=" form-control input-sm dtpicker" name="startTimeTop" id="startTimeTop_qo" type="text" placeholder="请选择" value="$!{planConfigQo.startTimeTop}">
+							</div>
+						</div>
+					</div>
+					<div class="row row-ise">
+						<div class="col-sm-7 ">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">状态属性:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+                                <select name="status" id="status_qo" class="form-control">
+                                    #if((${StringUtils.isEmpty($!{planConfigQo.status})}))
+                                        <option value="">请选择</option>
+                                        <option value="1">运行</option>
+                                        <option value="0">停止</option>
+									#else
+                                        <option value="">请选择</option>
+                                        <option selected value="$!{planConfigQo.status}">$!{planConfigQo.statusChange}</option>
+										#if($!{planConfigQo.status}==0)
+                                            <option value="1">运行</option>
+										#elseif($!{planConfigQo.status}==1)
+                                            <option value="0">停止</option>
+										#end
+									#end
+                                </select>
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务停止起始时间:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+								<input class=" form-control input-sm dtpicker" name="endTimeBelow" id="endTimeBelow_qo" type="text" placeholder="请选择" value="$!{planConfigQo.endTimeBelow}">
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务停止终止时间:</label>
+
+							<div class="col-sm-11 col-md-13 col-lg-15">
+								<input class=" form-control input-sm dtpicker" type="text" name="endTimeTop" id="endTimeTop_qo" placeholder="请选择" value="$!{planConfigQo.endTimeTop}">
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-24 text-center btn-box">
+                            <input type="hidden" name="pageNum" value="$!{planConfigQo.pageNum}">
+                            <input type="hidden" name="pageSize" value="$!{planConfigQo.pageSize}">
+							<button class="btn btn-sm btn-submit" id="data-query">查询</button>
+							<input class=" btn btn-sm btn-reset" type="button" value="重置"/>
+						</div>
+					</div>
+
+				</form>
+
+			</div>
+		</div>
+		<div class="wlk-bottom">
+			<!--数据操作-->
+			<div class="query-operation">
+				<button id="plan-add" class="btn btn-xs btn-success">新增</button>
+				<button id="plan-delete" class="btn btn-xs btn-delete">删除</button>
+				<button id="plan-toconfig" class="btn btn-xs btn-settings">生成作业配置</button>
+			</div>
+
+			<!--查询结果-->
+			<div class="qurey-result table-responsive">
+				<table class="table table-hover data-tb">
+					<thead>
+					<tr>
+						<th>
+							<input type="checkbox" class="choose_all">
+						</th>
+						<th>序号</th>
+						<th>计划名称</th>
+                        <th>启动时间</th>
+                        <th>停止时间</th>
+                        <th>状态</th>
+						<th>是否分享</th>
+						<th>创建时间</th>
+						<th>创建人</th>
+						<th>状态</th>
+						<th>操作</th>
+					</tr>
+					</thead>
+
+					<tbody>
+						#foreach($planConfigVo in ${result})
+							<tr data-id="${planConfigVo.id}">
+							<td class="choose">
+								<input type="text" id="${planConfigVo.id}" name="planConfigId" class="hide"
+									   value="${planConfigVo.id}"/>
+								<input type="checkbox" name="subBox" class="menu_table-checkbox">
+							</td>
+							<td>$!{velocityCount}</td>
+							<td id="${planConfigVo.id}-name">$!{planConfigVo.name}</td>
+                            <td >$!{planConfigVo.startTime}</td>
+                            <td >$!{planConfigVo.stopTime}</td>
+                            <td >$!{planConfigVo.status}</td>
+							<td id="${planConfigVo.id}-isShare">
+							#if(${StringUtils.equals(${planConfigVo.isShare},"0")})不分享#else 分享#end
+							</td>
+							<td id="${planConfigVo.id}-createTime">$!{planConfigVo.createTime}</td>
+							<td id="${planConfigVo.id}-createUser">$!{planConfigVo.createUser}</td>
+							<td id="${planConfigVo.id}-status">
+								#if(${StringUtils.equals(${planConfigVo.status},"0")})停止#else 启动#end
+							</td>
+							<td id="${planConfigVo.id}-recipientsCn" class="hide">$!{planConfigVo.recipientsCn}</td>
+							<td id="${planConfigVo.id}-noticeWay" class="hide">
+								#if(${StringUtils.equals(${planConfigVo.noticeWay},"1")})短信
+								#elseif (${StringUtils.equals(${planConfigVo.noticeWay},"2")}) 邮件
+								#else 短信和邮件
+								#end
+							</td>
+							<td id="${planConfigVo.id}-startUser" class="hide">$!{planConfigVo.startUser}</td>
+							<td id="${planConfigVo.id}-stopUser" class="hide">$!{planConfigVo.stopUser}</td>
+							<td id="${planConfigVo.id}-desc" class="hide">$!{planConfigVo.desc}</td>
+							<td>
+								<a href="javascript:showDetail('${planConfigVo.id}');">详情</a>
+								<a href="javascript:editPlan('${planConfigVo.id}');">修改</a>
+								<a href="#" class="config_delete">删除</a>
+								<a href="javascript:startPlan('${planConfigVo.id}');">批量运行</a>
+								<a href="javascript:stopPlan('${planConfigVo.id}');">停止</a>
+								<a href="javascript:releasePlan('${planConfigVo.id}');">发布</a>
+								<a href="javascript:showVersion('${planConfigVo.id}');">历史重跑</a>
+								<a href="javascript:jobConfig('${planConfigVo.id}');">作业配置</a>
+                                <a href="javascript:runPlan('${planConfigVo.id}');">参数配置</a>
+                                <a href="javascript:runPlan('${planConfigVo.id}');">依赖计划</a>
+							</td>
+						</tr>
+						#end
+					</tbody>
+				</table>
+
+
+				<!--分页栏-->
+				#set($pageUrl="tsp/planconfig")
+				#page($!{result.getPageTools()} "#pluginLink($pageUrl)" "query_form")
+			</div>
+
+		</div>
+
+	</div>
+
+</section>
+
+
+<!--查看详情弹出框内容-->
+<div id="modal-detail" style="display: none;">
+	<div class="modal-body">
+		<form id="form-detail" class="form-horizontal" action="">
+			<input type="text" name="id" class="hide">
+
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">计划名称：</label>
+
+				<div class="col-sm-18">
+					<input type="text" name="name" class="form-control name" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">通知人：</label>
+
+				<div class="col-sm-18 input-group stree">
+					<input class=" form-control recipientsCn" name="recipientsCn" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="noticeWay">通知方式：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control noticeWay" name="noticeWay" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">是否分享：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control isShare" name="isShare" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">创建人：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control createUserName" name="createUserName" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">创建时间：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control createTime" name="createTime" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">启动人：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control startUserName" name="startUserName" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">启动时间：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control startTime" name="startTime" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">停止人：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control stopUserName" name="stopUserName" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">停止时间：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control stopTime" name="stopTime" type="text" disabled/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">描述：</label>
+
+				<div class="col-sm-18">
+					<input type="textarea" name="desc" class="form-control desc" disabled/>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<strong></strong>
+</div>
+
+<!--运行弹出框内容-->
+<div id="runtime-edit" style="display: none;">
+	<div class="modal-body">
+		<form id="form-runtime" class="form-horizontal" action="">
+			<input type="text" name="planConfigId" class="hide">
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">开始时间：</label>
+				<div class="col-sm-18">
+					<input class=" form-control input-sm dtpicker" type="text" name="beginTime" placeholder="请选择">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">结束时间：</label>
+				<div class="col-sm-18">
+					<input class=" form-control input-sm dtpicker" type="text" name="endTime" placeholder="请选择">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--生成作业配置弹出框内容-->
+<div id="to-plan" style="display: none;">
+	<div class="modal-body">
+		<form id="form-toplan" class="form-horizontal" action="#pluginLink('tsp/planconfig/addjobconfigbyxml')"
+			  method="post" enctype="multipart/form-data">
+			<input type="text" name="planConfigId" class="hide">
+
+			<div class="form-group">
+				<label class="control-label col-sm-5" for="">文件输入框：</label>
+
+				<div class="col-sm-18">
+					<input class=" form-control" type="file" name="jobconfigfile" placeholder="未选择任何文件">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--修改和新增弹出框内容-->
+<div id="modal-edit" style="display: none;">
+	<div class="modal-body">
+		<form id="form-edit" class="form-horizontal" action="">
+			<input type="text" name="id" class="hide">
+
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">计划名称：</label>
+
+				<div class="col-sm-18">
+					<input type="text" name="name" class="form-control name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">通知人：</label>
+				<div class="col-sm-18 input-group stree">
+					<input id="recipients" name="recipients" type="hidden" value=""/>
+					<input class=" form-control recipientsCn" id="recipientsCn"  name="recipientsCn" type="text" value=""  placeholder="请选择" />
+					<span class="input-group-btn">
+						<button class="iconfont icon-downarrow"></button>
+					</span>
+					<div id="treeContent" class="col-sm-24 form-control posDown">
+						<!--下拉树-->
+						<ul id="tree" class="ztree tree-list"></ul>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="noticeWay">通知方式：</label>
+
+				<div class="col-sm-18">
+					<select name="noticeWay" class="form-control noticeWay">
+						<option value="1">短信</option>
+						<option value="2">邮件</option>
+						<option value="3">短信和邮件</option>
+					</select>
+				</div>
+			</div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="noticeWay">执行方式：</label>
+                <div class="col-sm-18">
+                    <select name="startKind" class="form-control noticeWay">
+                        <option value="1">旧任务没有结束,新任务取消</option>
+                        <option value="2">旧任务没有结束,新任务等待</option>
+                        <option value="3">旧任务没有结束,新任务执行</option>
+                    </select>
+                </div>
+            </div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">是否分享：</label>
+
+				<div class="col-sm-18">
+					<select name="isShare" class="form-control isShare">
+						<option value="0">不分享</option>
+						<option value="1">分享</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-4" for="">描述：</label>
+
+				<div class="col-sm-18">
+					<input type="textarea" name="desc" class="form-control desc">
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<!--查看版本弹出框内容-->
+<div id="version-detail" style="display: none;">
+    <div class="modal-body">
+		<table class="table table-hover data-tb">
+			<thead>
+			<tr>
+                <th>序号</th>
+				<th>计划名称</th>
+                <th>通知接受人</th>
+                <th>通知方式</th>
+                <th>调度周期</th>
+                <th>发布时间</th>
+                <th>发布人</th>
+                <th>版本号</th>
+			</tr>
+			</thead>
+			<tbody id="version-body">
+			</tbody>
+		</table>
+    </div>
+</div>
+
+<input id="path" type="hidden" value="${rc.contextPath}">
+<input id="baseUri" type="hidden" value="${rc.contextPath}/plugin/${pluginName}/${pluginVersion}"/>
+
+	#parse("common/bottom-share-code.vm")
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${rc.contextPath}/libs/stree/ztree.js"></script>
+<script src="${rc.contextPath}/libs/stree/stree.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/src/js/planconfig.js"></script>
+</body>
+</html>
+

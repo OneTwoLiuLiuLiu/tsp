@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+    <title>手动计划</title>
+    #set($breadcrumb="<li>手动计划</li>")
+    #parse("common/top-share-code-core.vm")
+    #parse("common/top-share-code-welkin.vm")
+    <!-- font icon -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+
+    <!-- plugins stylesheets -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+
+    <!-- welkin stylesheet -->
+    <link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<!-- body -->
+
+    #parse("common/page-header-nav.vm")
+<section class="main ">
+    <div class="container-fluid tsp">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="" id="query_runplan_form" name="query_runplan_form">
+                    <div class="row row-ise">
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">计划名称:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm" type="text" name="planconfigname" placeholder="" value="$!{runPlanQo.planconfigname}">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务开始起始时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm starttimebelow dtpicker" name="startTimeBelow" type="text" placeholder="请选择" value="$!{runPlanQo.startTimeBelow}">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务结束起始时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm endtimebelow dtpicker" name="endTimeBelow" type="text" placeholder="请选择" value="$!{runPlanQo.endTimeBelow}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-ise">
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">状态属性:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <select name="status" class="form-control">
+                                    <option value="">请选择</option>
+                                    #if(${StringUtils.equals(${runPlanQo.status},"1")})
+                                        <option value="1" selected="true">运行</option>
+                                        <option value="0">停止</option>
+                                    #elseif(${StringUtils.equals(${runPlanQo.status},"0")})
+                                        <option value="1">运行</option>
+                                        <option value="0" selected="true">停止</option>
+                                    #else
+                                        <option value="1">运行</option>
+                                        <option value="0">停止</option>
+                                    #end
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务开始终止时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm starttimetop dtpicker" name="startTimeTop" type="text" placeholder="请选择" value="$!{runPlanQo.startTimeTop}">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务结束终止时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm endtimetop dtpicker" name="endTimeTop" type="text" placeholder="请选择" value="$!{runPlanQo.endTimeTop}">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-24 text-center btn-box">
+                            <input type="hidden" name="pageNum" value="$!{runPlanQo.pageNum}">
+                            <input type="hidden" name="pageSize" value="$!{runPlanQo.pageSize}">
+                            <button class="btn btn-sm btn-submit">查询</button>
+                            <input class=" btn btn-sm btn-reset" type="reset" value="重置"/>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="wlk-bottom">
+            <!--数据操作-->
+            <div class="query-operation">
+                <button id="plan-run" class="btn btn-xs btn-success">运行</button>
+                <button id="plan-end" class="btn btn-xs btn-success">停止</button>
+                <button id="plan-findrunplan" class="btn btn-xs btn-success" >查看运行计划</button>
+            </div>
+
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table table-hover data-tb">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="choose_all">
+                        </th>
+                        <th>序号</th>
+                        <th>计划名称</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        #foreach($runPlanVo in ${result})
+                        <tr>
+                            <td id="${runPlanVo.id}-id" class="hide">$!{runPlanVo.id}</td>
+                            <td class="choose">
+                            <input type="text" id="${runPlanVo.id}" name="runPlanId" class="hide"
+                                   value="${runPlanVo.id}"/>
+                            <input type="checkbox" name="subBox" class="menu_table-checkbox">
+                            </td>
+                            <td>$!{velocityCount}</td>
+                            <td id="${runPlanVo.id}-pname">$!{runPlanVo.planConfig.name}</td>
+                            <td id="${runPlanVo.id}-starttime">$!{runPlanVo.startTime}</td>
+                            <td id="${runPlanVo.id}-endtime">$!{runPlanVo.endTime}</td>
+                            <td id="${runPlanVo.id}-status">$!{runPlanVo.statuscn}</td>
+                        </tr>
+                        #end
+                    </tbody>
+
+
+                </table>
+##                #page($!{result.getPageTools()} "${rc.contextPath}/plugin/${pluginName}/${pluginVersion}/runplan/list?authType=$!{runPlanQo.authType}")
+                <!--分页栏-->
+                #set($pageUrl="tsp/runplan")
+                #page($!{result.getPageTools()} "#pluginLink($pageUrl)" "query_runplan_form")
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+
+<!--日志详情-->
+<div class="modal-log hide">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            Group is not existed.
+        </form>
+    </div>
+
+</div>
+
+<!--重新运行-->
+<div class="modal-restart hide">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            已重新开始
+        </form>
+    </div>
+
+</div>
+
+<div id="runplan-detail" style="display: none;">
+    <div class="modal-body">
+        <table class="table table-hover data-tb">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>计划名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>状态</th>
+                <th>批次号</th>
+            </tr>
+            </thead>
+            <tbody id="runplan-body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+<input type="hidden" id="path" value="#pluginLink('')">
+<input type="hidden" id="contextPath" value="${rc.contextPath}">
+    #parse("common/bottom-share-code.vm")
+<script src="${rc.contextPath}/libs/jquery/1.9.1/jquery.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap/3.3.4/js/bootstrap.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+<script src="${rc.contextPath}/src/js/runplan-list.js"></script>
+</body>
+</html>

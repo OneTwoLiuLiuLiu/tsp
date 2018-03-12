@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fap-plugin xmlns="http://www.sunyard.com/fap">
+
+    <plugin-info>
+        <name>plugin-tsp</name>
+        <version>1.0.0</version>
+        <vendor name="sunyard" url="http://www.sunyard.com"/>
+        <platform-min-version>1.0.0</platform-min-version>
+        <platform-max-version>3.0.0</platform-max-version>
+        <description>任务调度插件</description>
+    </plugin-info>
+
+    <web-item>
+        <static>
+            <resource>*.js</resource>
+            <resource>*.css</resource>
+            <resource>*.png</resource>
+            <resource>*.gif</resource>
+            <resource>*.html</resource>
+        </static>
+    </web-item>
+
+    <sqls>
+        <sql database="db2" file="sql/init-db2.sql"></sql>
+    </sqls>
+
+    <!-- 插件数字典值 -->
+    <dictionarytypes>
+        <!-- append默认值为false -->
+        <dictionarytype key="tsp.job.type" val="作业类型" description="作业类型" append="false">
+            <dictionaries>
+                <!-- order根据dictionary位置顺序来定义-->
+                <dictionary key="jar" val="可执行jar文件" description="可执行jar文件" />
+                <dictionary key="exe" val="可执行exe文件" description="可执行exe文件" />
+                <dictionary key="bat" val="bat脚本" description="bat脚本" />
+                <dictionary key="http" val="java调用http" description="java调用http" />
+                <dictionary key="shell" val="shell脚本" description="shell脚本" />
+                <dictionary key="kjb" val="kjb文件" description="kjb文件" />
+                <dictionary key="storepro" val="存储过程" description="存储过程" />
+                <dictionary key="ktr" val="ktr文件" description="ktr文件" />
+                <dictionary key="datastage" val="dataStage" description="dataStage" />
+            </dictionaries>
+        </dictionarytype>
+        <dictionarytype key="tsp.job.resource.type" val="资源类型" description="资源类型" append="false">
+            <dictionaries>
+                <!-- order根据dictionary位置顺序来定义-->
+                <dictionary key="1" val="数据库资源库" description="数据库资源库" />
+                <dictionary key="2" val="文件资源库" description="文件资源库" />
+                <dictionary key="3" val="本地文件" description="本地文件" />
+            </dictionaries>
+        </dictionarytype>
+    </dictionarytypes>
+
+
+    <!-- 插件系统参数定义 -->
+    <params>
+    </params>
+
+    <!-- 权限注册 -->
+    <authcodes>
+        <!-- code为权限码 type权限类型,name为权限名称，description权限描述，scope是否可设置范围域，ture可设置，false不可设置，general是否通用授权，只有为true,mask属性才有效，mask权限掩码，四位，xrwa分别表示执行、可读、可写、复核四个通用权限，-表示该位权限禁用-->
+        <authcode code="TSP_MANAGER" type="type.system" name="任务调度" description="任务调度" scope="false" general="false"/>
+    </authcodes>
+
+    <!-- 功能定义 -->
+    <functions>
+        <!-- 功能注册可以自包含，注册成功能树，只有叶子节点才是真正的功能，icon定为styleclass名,authcode为功能绑定权限码，用逗号分隔，如果authcode未定义或未设置值，则在自定义菜单时不会显示该功能项,公共权限码：anonymous, logon-->
+        <function name="任务调度" description="任务调度" url="" icon="setting" authcode="blank" append="true">
+            <children>
+                <function name="作业服务器" description="作业服务器" url="/tsp/jobserverconfig"
+                          icon="tsp" authcode="TSP_JOB_SERVER_CONFIG"/>
+                <function name="计划配置" description="计划配置" url="/tsp/planconfig"
+                          icon="tsp" authcode="TSP_PLAN_CONFIG"/>
+                <function name="计划监控" description="计划监控" url="/tsp/planmonitor"
+                          icon="tsp" authcode="TSP_PLAN_MONITOR"/>
+                <function name="作业监控" description="作业监控" url="/tsp/jobmonitor"
+                          icon="tsp" authcode="TSP_JOB_MONITOR"/>
+                <function name="等待作业" description="等待作业" url="/tsp/waittingview"
+                          icon="tsp" authcode="TSP_JOB_WAITTING_VIEW"/>
+                <function name="作业池" description="作业池" url="/tsp/poolview"
+                          icon="tsp" authcode="TSP_JOB_POOL_VIEW"/>
+                <function name="手动计划" description="手动计划" url="/tsp/runplan"
+                          icon="tsp" authcode="TSP_PLAN_RUN"/>
+            </children>
+        </function>
+    </functions>
+
+    <!-- 插件菜单定义 -->
+    <menus>
+            <menu append="false">
+                <name>任务调度</name>
+                <code>tsp</code>
+                <!-- 如果菜单未定义authcodes表示，从所有子菜单中的权限合集 -->
+                <authcodes>blank</authcodes>
+                <module>module.tsp</module>
+                <icon>setting</icon>
+                <order>1</order>
+                <children>
+                    <menu>
+                        <name>作业服务器</name>
+                        <code>tsp.jobserverconfig</code>
+                        <url>/tsp/jobserverconfig</url>
+                        <authcodes>TSP_JOB_SERVER_CONFIG</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>1</order>
+                    </menu>
+                    <menu>
+                        <name>计划配置</name>
+                        <code>tsp.planconfig</code>
+                        <url>/tsp/planconfig</url>
+                        <authcodes>TSP_PLAN_CONFIG</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>2</order>
+                    </menu>
+                    <menu>
+                        <name>计划监控</name>
+                        <code>tsp.planmonitor</code>
+                        <url>/tsp/planmonitor</url>
+                        <authcodes>TSP_PLAN_MONITOR</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>3</order>
+                    </menu>
+                    <menu>
+                        <name>作业监控</name>
+                        <code>tsp.jobmonitor</code>
+                        <url>/tsp/jobmonitor</url>
+                        <authcodes>TSP_JOB_MONITOR</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>4</order>
+                    </menu>
+                    <menu>
+                        <name>等待作业</name>
+                        <code>tsp.waittingview</code>
+                        <url>/tsp/waittingview</url>
+                        <authcodes>TSP_JOB_WAITTING_VIEW</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>5</order>
+                    </menu>
+                    <menu>
+                        <name>作业池</name>
+                        <code>tsp.poolview</code>
+                        <url>/tsp/poolview</url>
+                        <authcodes>TSP_JOB_POOL_VIEW</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>6</order>
+                    </menu>
+                    <menu>
+                        <name>手动计划</name>
+                        <code>tsp.runplan</code>
+                        <url>/tsp/runplan</url>
+                        <authcodes>TSP_PLAN_RUN</authcodes>
+                        <module>module.tsp</module>
+                        <icon>tsp</icon>
+                        <order>7</order>
+                    </menu>
+                </children>
+
+            </menu>
+    </menus>
+
+    <actions>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.JobServerConfigController" url="/tsp/jobserverconfig"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.PlanConfigController" url="/tsp/planconfig"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.PlanMonitorController" url="/tsp/planmonitor"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.JobMonitorController" url="/tsp/jobmonitor"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.PoolViewController" url="/tsp/poolview"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.WaittingViewController" url="/tsp/waittingview"/>
+        <action class="com.sunyard.frameworkset.plugin.tsp.manager.controller.RunPlanController" url="/tsp/runplan"/>
+    </actions>
+
+
+</fap-plugin>

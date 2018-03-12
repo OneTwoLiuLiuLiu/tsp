@@ -1,0 +1,18 @@
+package ${packageName};
+
+import com.sunyard.frameworkset.dao.jpa.JpaBaseDaoImpl;
+import ${apiDao.longClassName};
+import ${entity.longClassName};
+import ${qo.longClassName};
+import org.springframework.stereotype.Repository;
+
+/**
+ * ${table.desc} jdbc实现类
+ *
+ * Author: Created by code generator
+ * Date: ${date}
+ */
+@Repository
+public class ${daoImpl.shortClassName}  extends JpaBaseDaoImpl<${entity.shortClassName},String,${qo.shortClassName}> implements ${apiDao.shortClassName}{
+
+}

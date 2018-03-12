@@ -1,0 +1,14 @@
+package ${packageName};
+
+import com.sunyard.frameworkset.core.service.BaseService;
+import ${entity.longClassName};
+import ${qo.longClassName};
+
+/**
+ * ${table.desc} service 接口
+ *
+ * Author: Created by code generator
+ * Date: ${date}
+ */
+public interface ${apiService.shortClassName} extends BaseService<${entity.shortClassName}, String, ${qo.shortClassName}> {
+}

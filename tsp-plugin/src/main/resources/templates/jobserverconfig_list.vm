@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+
+    <title>作业服务器</title>
+    #set($breadcrumb="<li>作业服务器</li>")
+    #parse("common/top-share-code-core.vm")
+    #parse("common/top-share-code-welkin.vm")
+
+    <!-- font icon -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+
+    <!-- plugins stylesheets -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-select/1.12.1/css/bootstrap-select.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+
+    <!-- welkin stylesheet -->
+    <link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+
+
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    #set($jobTypeList=${DicTools.getDics("tsp.job.type")})
+    #parse("common/page-header-nav.vm")
+<!-- body -->
+<section class="main ">
+    <div class="container-fluid tsp">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="/tsp/jobserverconfig" id="query_jobserverconfig_form" name="query_jobserverconfig_form">
+                    <div class="row row-ise">
+                        <div class="col-sm-8 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">主机名称:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm" type="text" name="hostname" id="hostname" value="$!{jobServerConfigQo.hostname}" placeholder="">
+                            </div>
+                        </div>
+                       #* <div class="col-sm-8 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">状态属性:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle dpn-size" type="button"
+                                            id="dropdownMenu1" data-toggle="dropdown">
+                                        <span class="sel-val">完成</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu sel-state" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">完成</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">开始</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">进行中</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>*#
+                    </div>
+
+                    <div class="row ">
+                        <div class="col-sm-24 text-center btn-box">
+                            <input type="hidden" name="pageNum" value="$!{jobServerConfigQo.pageNum}">
+                            <input type="hidden" name="pageSize" value="$!{jobServerConfigQo.pageSize}">
+                            <button id="data-query" class="btn btn-sm btn-submit">查询</button>
+                            <button class=" btn btn-sm btn-reset">重置</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="wlk-bottom">
+            <!--数据操作-->
+            <div class="query-operation">
+##                <button class="btn btn-xs btn-success edit">修改</button>
+                <button class="btn btn-xs btn-success delete">删除</button>
+##                <button class="btn btn-xs btn-success btn_enable">启用</button>
+##                <button class="btn btn-xs btn-success btn_disabled">不启用</button>
+
+            </div>
+
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table table-hover data-tb">
+                    <thead>
+                    <tr>
+                        <th class="choose_all">
+                            <input type="checkbox" class="menu_table-checkbox-all">
+                        </th>
+                        <th>序号</th>
+                        <th>主机</th>
+                        <th>最大运行数</th>
+                        <th>最小空闲内存（%）</th>
+                        <th>最小空闲CPU（%）</th>
+                        <th>可运行作业类型</th>
+                        <th>状态</th>
+                        <th>是否启用</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <form id="deleteBatchForm" action="#pluginLink('/tsp/jobserverconfig/deleteall')" method="post">
+                        #foreach($jobServerConfigVo in ${result})
+                        <tr>
+                            <td class="choose">
+                                <input type="text" id="${jobServerConfigVo.id}" name="jobServerConfigId" class="hide" value="${jobServerConfigVo.id}"/>
+                                <input type="checkbox"  id="${jobServerConfigVo.id}-subBox" class="menu_table-checkbox">
+                            </td>
+                            <td id="${jobServerConfigVo.id}-id" class="hide">$!{jobServerConfigVo.id}</td>
+                            <td>$!{velocityCount}</td>
+                            <td id="${jobServerConfigVo.id}-hostname">$!{jobServerConfigVo.hostname}</td>
+                            <td id="${jobServerConfigVo.id}-maxRunNum">$!{jobServerConfigVo.maxRunNum}</td>
+                            <td id="${jobServerConfigVo.id}-minFreeMemory">$!{jobServerConfigVo.minFreeMemory}</td>
+                            <td id="${jobServerConfigVo.id}-minFreeCpu">$!{jobServerConfigVo.minFreeCpu}</td>
+                            <td id="${jobServerConfigVo.id}-maxHistoryDay" class="hide">$!{jobServerConfigVo.maxHistoryDay}</td>
+                            <td id="${jobServerConfigVo.id}-runJobType" class="hide">$!{jobServerConfigVo.runJobType}</td>
+                            <td id="${jobServerConfigVo.id}-runJobTypeCn">
+                                #set($jobTypeCn="")
+                                #foreach($jobType in  $jobTypeList)
+                                    #if(${StringUtils.contains(${jobServerConfigVo.runJobType},${jobType.dicKey})})
+                                        #set($jobTypeCn="$!{jobTypeCn},$!{jobType.dicVal}")
+                                        ##set($jobTypeCn=$!{jobTypeCn}+","+$!{jobType.dicVal})
+                                    #end
+                                #end
+                                #if($jobTypeCn!="")
+                                    #set($jobTypeCn=$jobTypeCn.substring(1,$jobTypeCn.length()))  ##移除第一个英文逗号
+                                #end
+                                $!jobTypeCn
+                                #*$!{jobServerConfigVo.runJobType}*#
+                            </td>
+                            <td id="${jobServerConfigVo.id}-isonline">$!{jobServerConfigVo.isOnline}</td>
+                            <td id="${jobServerConfigVo.id}-status">
+                                #if(${StringUtils.equals(${jobServerConfigVo.status},"1")})启用
+                                #else 未启用
+                                #end
+                            </td>
+                            <td>
+                                #if(${StringUtils.equals(${jobServerConfigVo.status},"1")})
+                                    <a href="javascript:disabled('${jobServerConfigVo.id}');" class="enable">未启用</a>
+                                #else
+                                    <a href="javascript:enable('${jobServerConfigVo.id}');" class="disabled"> 启用</a>
+                                #end
+                                <a href="javascript:edit('${jobServerConfigVo.id}','${jobServerConfigVo.hostname}');" class="edit">修改</a>
+                                <a href="javascript:deleteOne('${jobServerConfigVo.id}','${jobServerConfigVo.hostname}');" class="del" id="at">删除</a>
+                            </td>
+                        </tr>
+                        #end
+                        </form>
+                    </tbody>
+
+
+                </table>
+
+
+                <!--分页栏-->
+                #set($pageUrl="tsp/jobserverconfig")
+                #page($!{result.getPageTools()} "#pluginLink($pageUrl)" "query_jobserverconfig_form")
+            </div>
+        </div>
+    </div>
+
+</section>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+
+<!--日志详情-->
+<div class="modal-log hide">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            Group is not existed.
+        </form>
+    </div>
+
+</div>
+
+<!--编辑页面-->
+<div class="modal-edit" style="display: none"">
+    <div class="modal-body">
+        <form id="modifyJobServerConfigForm" class="form-horizontal" action="#pluginLink('tsp/jobserverconfig/updatejobserver')" method="post">
+            <div class="form-group">
+                <label class="control-label col-sm-7" for="">主机名：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="hide id" value="" id="id" name="id"/>
+                    <input type="text" class="form-control hostname" value="" name="hostname" id="hostname_modify"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-7" for="">可运行最大作业数：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="form-control maxRunNum" value="" name="maxRunNum" id="maxRunNum_modify"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-7" for="">最小空闲内存(%)：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="form-control minFreeMemory" value="" name="minFreeMemory" id="minFreeMemory_modify"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-7" for="">最小空闲cpu(%)：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="form-control minFreeCpu" value="" name="minFreeCpu" id="minFreeCpu_modify"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-7" for="">日志保留天数：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="form-control maxHistoryDay" value="" name="maxHistoryDay" id="maxHistoryDay_modify"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-7">可运行作业类型：</label>
+                <div class="col-sm-16">
+                     <select class="form-control selectpicker" multiple  id="jobTypes_modify" name="jobTypes" title="请选择可运行作业类型">
+                         #foreach($jobType in $jobTypeList)
+                             <option value="${jobType.dicKey}">${jobType.dicVal}</option>
+                         #end
+                     </select>
+                </div>
+            </div>
+##
+        </form>
+
+
+    </div>
+
+</div>
+
+
+
+<input type="hidden" id="path" value="#pluginLink('')">
+<input type="hidden" id="contextPath" value="${rc.contextPath}">
+    #parse("common/bottom-share-code.vm")
+
+
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="${rc.contextPath}/src/js/jobserverconfig_list.js"></script>
+
+
+
+</body>
+</html>
+

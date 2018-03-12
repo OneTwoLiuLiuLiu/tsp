@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolbox>
+    <tool>
+        <key>DateFormatUtils</key>
+        <scope>application</scope>
+        <class>org.apache.commons.lang3.time.DateFormatUtils</class>
+    </tool>
+    <tool>
+        <key>StringUtils</key>
+        <scope>application</scope>
+        <class>org.apache.commons.lang3.StringUtils</class>
+    </tool>
+    <tool>
+        <key>DicTools</key>
+        <scope>application</scope>
+        <class>com.sunyard.frameworkset.plugin.dictionary.core.DicTools</class>
+    </tool>
+    <tool>
+        <key>EnumTools</key>
+        <scope>application</scope>
+        <class>com.sunyard.frameworkset.infrastructure.tools.EnumTools</class>
+    </tool>
+    <tool>
+        <key>SystemParamTools</key>
+        <scope>application</scope>
+        <class>com.sunyard.frameworkset.plugin.tools.SystemParamTools</class>
+    </tool>
+    <tool>
+        <key>OrgTools</key>
+        <scope>application</scope>
+        <class>com.sunyard.frameworkset.plugin.user.core.OrgTools</class>
+    </tool>
+
+    <tool>
+        <key>UserTools</key>
+        <scope>application</scope>
+        <class>com.sunyard.frameworkset.plugin.user.core.UserTools</class>
+    </tool>
+
+</toolbox>

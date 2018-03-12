@@ -1,0 +1,138 @@
+#set($loginUser = $session.getAttribute("LOGIN_USER"))
+
+<!-- header -->
+<header class="header">
+    <!--左侧菜单和logo部分-->
+    <div class="pull-left">
+        <!--导航菜单按钮-->
+        <div class="nav-menu pull-left"></div>
+        <!--项目logo-->
+        <div class="logo pull-left"></div>
+        <!--面包屑-->
+        <div class="break-nav">
+            <ol class="breadcrumb">
+                <li>当前位置：</li>
+                <li><a href="${rc.contextPath}/main">首页</a></li>
+                $!{breadcrumb}
+            </ol>
+        </div>
+    </div>
+
+    <div class="pull-right opt-box">
+        <!--搜索框-->
+        <div class="search pull-left hidden-xs hidden-sm">
+            <form action="${rc.contextPath}/custinfo/accquery" id="nav-search-input" method="post">
+                <input type="text" placeholder="请输入证件号">
+                <i class="iconfont serch-img icon-search "></i>
+                <input type="submit">
+            </form>
+        </div>
+        <!--操作按钮-->
+        <div class="btn-box pull-left hidden-xs">
+            <a class="to-home" href="${rc.contextPath}/main">
+                <i class="iconfont icon-index"></i>
+            </a>
+            <div class="msg-tip">
+                <a class=" animated bounce" href="${rc.contextPath}/majorEventRemind/list">
+                    <i class="iconfont icon-notice"></i>
+                </a>
+                #set($messageNum = ${MessageTools.getMessageNum(${loginUser})})
+                #if(${messageNum} > 0)
+                    <span class="message-num">${messageNum}</span>
+                #end
+            </div>
+            <div class="dropdown user-settings ">
+                <a class=" dropdown-toggle" data-toggle="dropdown">
+                    <i class="iconfont icon-user"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right animated flipInX" role="menu"
+                    aria-labelledby="user-manage">
+                    <li role="presentation">修改密码</li>
+                    <li class="divider"></li>
+                    <li role="presentation">
+                        用户:
+                        <span>$!{loginUser.name}</span>
+                    </li>
+                    <li role="presentation">
+                        柜员号:
+                        <span>$!{loginUser.code}</span>
+                    </li>
+                    <li role="presentation">
+                        岗位:
+                        <span>
+                            #set($role = $loginUser.getRole("000000L905"))
+                            #if($role)
+                                <p>${role.roleName}</p>
+                            #end
+
+                            #set($role2 = $loginUser.getRole("000000L904"))
+                            #if($role2)
+                                <p>${role2.roleName}</p>
+                            #end
+
+                            #set($role3 = $loginUser.getRole("000000L906"))
+                            #if($role3)
+                                <p>${role3.roleName}</p>
+                            #end
+
+                            #set($role4 = $loginUser.getRole("000000L903"))
+                            #if($role4)
+                                <p>${role4.roleName}</p>
+                            #end
+                        </span>
+                    </li>
+                    <li role="presentation">
+                        机构:
+                        <span>$!{loginUser.organization.orgName}</span>
+                    </li>
+                </ul>
+            </div>
+            <a class="exit" href="${rc.contextPath}/logout">
+                <i class="iconfont icon-exit"></i>
+            </a>
+        </div>
+    </div>
+</header>
+
+#*修改密码模态框*#
+<div class=" modal fade " tabindex="-1" id="revpass" role="dialog" aria-labelledby="myModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog ">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" id="cancelRePwdBtn">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <h4>修改密码</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">原密码：</label>
+                        <div class="col-sm-6">
+                            <input type="password" id="originalPwd" class="form-control" placeholder="输入原密码">
+                        </div> 
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">新密码：</label>
+                        <div class="col-sm-6">
+                            <input type="password" id="newPwd" class="form-control" placeholder="输入新密码">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-3">确认密码：</label>
+                        <div class="col-sm-6">
+                            <input type="password" id="newPwdRept" class="form-control" placeholder="确认密码">
+                        </div>
+                    </div>
+                    <div id="pass-alert" class="col-xs-offset-3 text-danger hid "></div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn crm-btn-red" id="makeRePwd">确认</button>
+                <button class="btn crm-btn-gray" id="cancelRePwd">取消</button>
+            </div>
+        </div>
+    </div>
+</div>

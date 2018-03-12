@@ -1,0 +1,47 @@
+<configuration scan="true" scanPeriod="30 seconds">
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%date [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logback/log/%d{yyyy-MM-dd}/frameworkset-log.%i.log
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>10MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%date [%thread] %-5level %logger{36} [%file:%line] %msg%n
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>jobid</key>
+			<defaultValue>clientlog</defaultValue>
+		</discriminator>
+		<sift>
+			<appender name="FILE-${jobid}" class="ch.qos.logback.core.FileAppender">
+				<File>logback/log/job/${jobid}.log</File>
+				<Append>false</Append>
+				<layout class="ch.qos.logback.classic.PatternLayout">
+					<Pattern>%date [%thread] %-5level %logger{36} [%file:%line] %msg%n</Pattern>
+				</layout>
+			</appender>
+		</sift>
+	</appender>
+	
+	<root level="info">
+		<appender-ref ref="STDOUT" />
+		<appender-ref ref="FILE" />
+		<appender-ref ref="SIFT" />
+	</root>
+</configuration>

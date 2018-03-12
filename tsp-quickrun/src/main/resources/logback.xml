@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <!--<appender name="SYNC_FILE"-->
+              <!--class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>./sync/sync.log</file>-->
+        <!--<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">-->
+            <!--<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+        <!--</encoder>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<fileNamePattern>./sync/sync.%d{yyyy-MM-dd}.log</fileNamePattern>-->
+            <!--<maxHistory>30</maxHistory>-->
+        <!--</rollingPolicy>-->
+    <!--</appender>-->
+
+    <logger name="org.springframework.jdbc.core.JdbcTemplate" level="error"/>
+
+    <!--<logger name="com.sunyard.frameworkset.plugin.user.schedule" additivity="false" level="error">-->
+        <!--<appender-ref ref="SYNC_FILE"/>-->
+    <!--</logger>-->
+
+    <logger name="com.sunyard.frameworkset.plugin.user.biz.impl" additivity="false" level="error">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <!--<logger name="com.sunyard" additivity="false" level="error">-->
+        <!--<appender-ref ref="STDOUT"/>-->
+    <!--</logger>-->
+    <logger name="org.springframework" additivity="false" level="info">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

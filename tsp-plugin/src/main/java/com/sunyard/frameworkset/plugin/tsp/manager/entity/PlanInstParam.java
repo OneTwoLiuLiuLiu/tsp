@@ -1,0 +1,81 @@
+package com.sunyard.frameworkset.plugin.tsp.manager.entity;
+
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.Serializable;
+
+@Entity
+@Table(name = "tsp_planInst_param")
+public class PlanInstParam implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5579425679902925083L;
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy=GenerationType.AUTO, generator="system-uuid")
+	@GenericGenerator(name = "system-uuid", strategy = "uuid2")
+	private String id;
+
+	/**
+	 * 计划实例号
+	 */
+	
+	@ManyToOne(cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	@JoinColumn(name="plan_inst_Id")
+	private PlanInstance planInst;
+	
+	
+	/**
+	 * 参数名称
+	 * 
+	 */
+	@Column(name="param_name",length=100)
+	private String paramName;
+	
+	/**
+	 * 参数值
+	 */
+	@Column(name="param_value")
+	private String paramValue;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	
+
+	public PlanInstance getPlanInst() {
+		return planInst;
+	}
+
+	public void setPlanInst(PlanInstance planInst) {
+		this.planInst = planInst;
+	}
+
+	public String getParamName() {
+		return paramName;
+	}
+
+	public void setParamName(String paramName) {
+		this.paramName = paramName;
+	}
+
+	public String getParamValue() {
+		return paramValue;
+	}
+
+	public void setParamValue(String paramValue) {
+		this.paramValue = paramValue;
+	}
+	
+	
+	
+}

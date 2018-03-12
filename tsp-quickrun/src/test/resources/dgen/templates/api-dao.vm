@@ -1,0 +1,15 @@
+package ${packageName};
+
+import ${entity.longClassName};
+import ${qo.longClassName};
+import com.sunyard.frameworkset.core.dao.BaseDao;
+
+/**
+ * ${table.desc} dao 接口
+ *
+ * Author: Created by code generator
+ * Date: ${date}
+ */
+public interface ${apiDao.shortClassName} extends BaseDao<${entity.shortClassName}, String, ${qo.shortClassName}> {
+
+}

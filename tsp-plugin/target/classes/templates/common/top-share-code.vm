@@ -1,0 +1,10 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+<link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+<link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+<link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+<link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+<!--[if lt IE 9]>
+<script src="${rc.contextPath}/libs/html5shiv.min.js"></script>
+<script src="${rc.contextPath}/libs/respond.min.js"></script>
+<![endif]-->

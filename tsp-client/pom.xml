@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>tsp</artifactId>
+        <groupId>com.sunyard.tsp</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tsp-client</artifactId>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sunyard.tsp</groupId>
+            <artifactId>tsp-spi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>fr.inria.powerapi.sensor</groupId>
+            <artifactId>sensor-cpu-sigar-times</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.summercool</groupId>
+            <artifactId>summercool-hsf</artifactId>
+            <version>1.1.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.sunyard.tsp</groupId>
+            <artifactId>tsp-execute</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>info.monitorenter</groupId>
+            <artifactId>cpdetector</artifactId>
+            <version>1.0.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>antlr</groupId>
+            <artifactId>antlr</artifactId>
+            <version>2.7.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mozilla.intl</groupId>
+            <artifactId>chardet</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/tsp-client</outputDirectory>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>com.sunyard.frameworkset.plugin.tsp.client.main.Main</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.7</version>
+                <executions>
+                    <execution>
+                        <id>copy-resources</id>
+                        <!-- here the phase you need -->
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/tsp-client</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>src/non-packaged-resources</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--
+            运行报一下错误，遗留待解决
+            [ERROR] Failed to execute goal org.apache.maven.plugins:maven-dependency-plugin:2.6:copy-dependencies (copy-dependencies) on project frameworkset-tsp-client: Artifact has not been packaged
+yet. When used on reactor artifact, copy should be executed after packaging: see MDEP-187. -> [Help 1]
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.6</version>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            &lt;!&ndash; ${project.build.directory}为Maven内置变量，缺省为target &ndash;&gt;
+                            <outputDirectory>${project.build.directory}/tsp-client/lib</outputDirectory>
+                            &lt;!&ndash; 表示是否不包含间接依赖的包 &ndash;&gt;
+                            <excludeTransitive>false</excludeTransitive>
+                            &lt;!&ndash; 表示复制的jar文件去掉版本信息 &ndash;&gt;
+                            <stripVersion>false</stripVersion>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+        </plugins>
+    </build>
+
+</project>

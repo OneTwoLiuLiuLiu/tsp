@@ -1,0 +1,15 @@
+package ${packageName};
+
+import com.sunyard.frameworkset.core.manager.BaseManager;
+import ${entity.longClassName};
+import ${qo.longClassName};
+import ${vo.longClassName};
+
+/**
+ * ${table.desc} manager 接口
+ *
+ * Author: Created by code generator
+ * Date: ${date}
+ */
+public interface ${apiBiz.shortClassName} extends BaseManager<${vo.shortClassName}, ${entity.shortClassName}, String, ${qo.shortClassName}> {
+}

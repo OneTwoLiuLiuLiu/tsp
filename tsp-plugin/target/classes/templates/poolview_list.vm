@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>作业池视图</title>
+    #set($breadcrumb="<li>作业池视图</li>")
+    #parse("common/top-share-code-core.vm")
+    #parse("common/top-share-code-welkin.vm")
+
+    <!-- font icon -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+
+    <!-- plugins stylesheets -->
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-select/1.12.1/css/bootstrap-select.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+
+    <!-- welkin stylesheet -->
+    <link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+
+
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<!-- header -->
+    #parse("common/page-header-nav.vm")
+
+<!-- body -->
+<section class="main ">
+    <div class="container-fluid user-manage">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="/tsp/poolview" method="post" name="query-form">
+                    <div class="col-lg-offset-2 col-sm-offset-1 col-md-offset-0 col-sm-10 col-md-8 col-lg-7 ">
+                        <label class="col-sm-8 text-right" for="">计划名称:</label>
+                        <div class="col-sm-16 ">
+                           <input name="pname" class="form-control input-sm" type="text"
+                                       id="p_name"  value="$!{poolViewQo.pname}" placeholder="">
+                            <input type="hidden" name="pageNum" value="$!{poolViewQo.pageNum}">
+                            <input type="hidden" name="pageSize" value="$!{poolViewQo.pageSize}">
+                        </div>
+                    </div>
+                    <div class="col-sm- 24 col-md-8 col-lg-7 text-center btn-box">
+                        <button id="data-query" class="btn btn-sm btn-submit">查询</button>
+                        <button class=" btn btn-sm btn-reset">重置</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="wlk-bottom">
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table table-hover data-tb">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>计划名称</th>
+                        <th>作业名称</th>
+                        <th>启动人</th>
+                        <th>启动时间</th>
+                        <th>创建人</th>
+                        <th>任务创建时间</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        #foreach($pooljobvo in ${result})
+                        <tr>
+                        <tr>
+                            <td>$!{velocityCount}</td>
+                            <td>$!{pooljobvo.pname}</td>
+                            <td>$!{pooljobvo.jname}</td>
+                            <td>$!{pooljobvo.startUser}</td>
+                            <td>$!{pooljobvo.startTime}</td>
+                            <td>$!{pooljobvo.createUser}</td>
+                            <td>$!{pooljobvo.createTime}</td>
+							<td>
+                                #if(${StringUtils.equals(${pooljobvo.status},"1")}) 已分配
+                                #else 未分配
+                                #end
+							</td>
+                        </tr>
+                        </tr>
+                        #end
+                    </tbody>
+
+
+                </table>
+                <!--分页栏-->
+                #page($!{result.getPageTools()} "${rc.contextPath}poolview")
+
+            </div>
+        </div>
+    </div>
+</section>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+
+
+<input type="hidden" id="path" value="#pluginLink('')">
+<input type="hidden" id="contextPath" value="${rc.contextPath}">
+    #parse("common/bottom-share-code.vm")
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${rc.contextPath}/src/js/poolview_list.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>登录</title>
+    #parse("common/top-share-code-core.vm")
+##	自己引入样式放到此处
+	#parse("common/top-share-code-welkin.vm.vm")
+</head>
+
+<body>
+<div class="-login welkin-login">
+	<div class="login">
+		<div class="log-con col-sm-10 col-lg-8">
+			<div class="con-head row">
+				<img src="${rc.contextPath}/src/assets/images/login/login-tit.png" alt="">
+			</div>
+			<div class="row">
+				<form method="post" action="${rc.contextPath}/logon">
+					<div class="con-body ">
+						<div class="by-con row">
+							<div class="log-int row">
+								<input class="col-sm-16  col-sm-offset-4"  type="text" id="username" name="loginName" value="$!{loginName}" placeholder="用户名">
+								<input class="col-sm-16 col-sm-offset-4" type="password" name="password" placeholder="密码">
+							</div>
+							<div class="row">
+								<div class="col-sm-offset-4">
+									<input  type="checkbox" id="ck-rmUser">&nbsp;<span href="javascript:;" class="logChose">记住用户名</span>
+								</div>
+							</div>
+                            #if($message)
+								<div class="log-prompt row" style="display: block">
+									<div class="col-sm-16  col-sm-offset-4">
+                                        ${message}
+									</div>
+								</div>
+                            #end
+							<div class="row log-btn">
+								<div class=" col-sm-16 col-sm-offset-4">
+									<input  type="submit" id="submit" value="登录" class="btn quickstart-btn-red  pull-left">
+									<input  type="reset" value="取消" class="btn quickstart-btn-gray  pull-right">
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="${rc.contextPath}/libs/jquery/1.9.1/jquery.js"></script>
+<script src="${rc.contextPath}/libs/jquery/jquery.cookie.js"></script>
+<script>
+
+	$(function(){
+		var username=$("#username");
+		function save(){
+			if($("#ck-rmUser").attr("checked")){
+
+				$.cookie("loginName", username.val(),{expires:7});
+			}else{
+				$.cookie("loginName", "",{expires:-1});
+			}
+		}
+		if($.cookie("loginName")){
+			$("#ck-rmUser").attr("checked",true);
+			username.val($.cookie("loginName"));
+		};
+		$("#submit").click(function(){
+			save()
+		})
+
+	});
+
+
+</script>
+</body>
+</html>
+

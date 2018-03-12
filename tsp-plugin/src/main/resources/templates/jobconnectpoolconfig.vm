@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+    <title>作业连接池配置</title>
+    #set($breadcrumb="<li>作业连接池配置</li>")
+    #parse("common/top-share-code-core.vm")
+    #parse("common/top-share-code-welkin.vm")
+    <link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet"
+          href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-select/1.12.1/css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+    <link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/stree/ui-tree.css">
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+<!-- header -->
+    #parse("common/page-header-nav.vm")
+
+##	#set($noticeWays=${DicTools.getDics("planconfig.noticeway")})
+<!-- body -->
+<section class="main ">
+    <div class="container-fluid tsp">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="" method="post" name="query_form">
+                    <div class="row row-ise">
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">数据源名称:</label>
+
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm" type="text" name="data_source_name" id="name_qo" placeholder="" value="$!{jobConnectPoolConfigQo.data_source_name}">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">数据库名称:</label>
+
+                                <div class="col-sm-11 col-md-13 col-lg-15">
+                                 <input class=" form-control input-sm" type="text" name="db_name" id="name_qo" placeholder="" value="$!{jobConnectPoolConfigQo.db_name}">
+                                </div>
+                        </div>
+                    </div>
+                    <div class="row row-ise">
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">数据库类型属性:</label>
+
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <select name="db_type" id="status_qo" class="form-control">
+                                        <option value="">请选择</option>
+                                        <option value="MySql">MySql</option>
+                                        <option value="DB2">DB2</option>
+                                        <option value="Postgresql">Postgresql</option>
+                                        <option value="Oracle">Oracle</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">有效状态:</label>
+
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <select name="enable_flag" id="status_qo" class="form-control">
+                                    <option value="">请选择</option>
+                                    <option value="1">有效</option>
+                                    <option value="0">无效</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-24 text-center btn-box">
+                            <input type="hidden" name="pageNum" value="$!{jobConnectPoolConfigVo.pageNum}">
+                            <input type="hidden" name="pageSize" value="20">
+                            <button class="btn btn-sm btn-submit" id="data-query">查询</button>
+                            <input class=" btn btn-sm btn-reset" type="button" value="重置"/>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+        <div class="wlk-bottom">
+            <!--数据操作-->
+            <div class="query-operation">
+                <button id="dataSource-add" class="btn btn-xs btn-success">新增</button>
+                <button id="dataSource-edit" class="btn btn-xs btn-settings">修改</button>
+                <button id="dataSource-delete" class="btn btn-xs btn-delete">删除</button>
+            </div>
+
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table table-hover data-tb">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input type="checkbox" class="choose_all">
+                        </th>
+                        <th>序号</th>
+                        <th>数据源名称</th>
+                        <th>数据库名称</th>
+                        <th>数据库类型</th>
+                        <th>数据库IP</th>
+                        <th>数据库端口</th>
+                        <th>Url</th>
+                        <th>Driver</th>
+                        <th>有效状态</th>
+                        <th>起始连接数</th>
+                        <th>最大连接数</th>
+                        <th>目前连接数</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                        #foreach($jobConnectPoolConfigVo in ${result})
+                        <tr data-id="${jobConnectPoolConfigVo.tsp_data_source_config_id}">
+                            <td class="choose">
+                                <input type="text" id="${jobConnectPoolConfigVo.tsp_data_source_config_id}" name="jobConnectPoolConfig" class="hide"
+                                       value="${jobConnectPoolConfigVo.tsp_data_source_config_id}"/>
+                                <input type="checkbox" name="subBox" class="menu_table-checkbox">
+                            </td>
+                            <td>$!{velocityCount}</td>
+                            <td id="${jobConnectPoolConfigVo.id}-name">$!{jobConnectPoolConfigVo.data_source_name}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_name}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_type}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_ip}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_port}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_url}</td>
+                            <td >$!{jobConnectPoolConfigVo.db_driver}</td>
+                            <td id="${jobConnectPoolConfigVo.tsp_data_source_config_id}-enable_flag">
+                                #if((${jobConnectPoolConfigVo.enable_flag}==0))无效#else 有效#end
+                            </td>
+                            <td >$!{jobConnectPoolConfigVo.init_count}</td>
+                            <td >$!{jobConnectPoolConfigVo.max_count}</td>
+                            <td >$!{jobConnectPoolConfigVo.current_count}</td>
+                        </tr>
+                        #end
+                    </tbody>
+                </table>
+
+
+                <!--分页栏-->
+                #set($pageUrl="tsp/planconfig")
+                #page($!{result.getPageTools()} "#pluginLink($pageUrl)" "query_form")
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+
+<!--修改和新增弹出框内容-->
+<div id="modal-edit" style="display: none;">
+    <div class="modal-body">
+        <form id="form-edit" class="form-horizontal" action="">
+            <input type="text" name="tsp_data_source_config_id" class="hide">
+            <input type="text" name="data_source_id" class="hide">
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据源名称：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="data_source_name" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库名称：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="db_name" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库类型：</label>
+
+                <div class="col-sm-18">
+                    <select name="db_type" class="form-control db_type">
+                        <option value="MySql">MySql</option>
+                        <option value="DB2">DB2</option>
+                        <option value="Postgresql">Postgresql</option>
+                        <option value="Oracle">Oracle</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库IP：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="db_ip" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库端口：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="db_port" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库用户名：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="db_user" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">数据库用户密码：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="db_pwd" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">有效状态:</label>
+
+                    <div class="col-sm-11 col-md-13 col-lg-15">
+                        <select name="enable_flag" id="status_qo" class="form-control">
+                            <option value="1">有效</option>
+                            <option value="0">无效</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">起始连接数：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="init_count" class="form-control name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">最大连接数：</label>
+
+                <div class="col-sm-18">
+                    <input type="text" name="max_count" class="form-control name">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<input id="path" type="hidden" value="${rc.contextPath}">
+<input id="baseUri" type="hidden" value="${rc.contextPath}/plugin/${pluginName}/${pluginVersion}"/>
+
+    #parse("common/bottom-share-code.vm")
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="${rc.contextPath}/libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="${rc.contextPath}/libs/stree/ztree.js"></script>
+<script src="${rc.contextPath}/libs/stree/stree.js"></script>
+<script type="text/javascript" src="${rc.contextPath}/src/js/jobconnectpoolconfig.js"></script>
+</body>
+</html>
+

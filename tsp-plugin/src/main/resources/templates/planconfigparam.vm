@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>系统参数配置</title>
+    #set($breadcrumb="<li>系统参数配置</li>")
+    #parse("common/top-share-code-core.vm")
+    #parse("common/top-share-code-welkin.vm")
+    <link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet"
+          href="${rc.contextPath}/libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap-select/1.12.1/css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="${rc.contextPath}/libs/animate/animate.min.css">
+    <link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+    <link rel="stylesheet" href="${rc.contextPath}/libs/stree/ui-tree.css">
+</head>
+<body>
+<!-- header -->
+#parse("common/page-header-nav.vm")
+
+<!-- body -->
+<section class="main ">
+    <div class="container-fluid tsp">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="" method="post" name="query-form">
+                    <div class="row row-ise">
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-8 text-right" for="">参数名:</label>
+                            <div class="col-sm-16 ">
+                                <input name="paramName" class="form-control input-sm" type="text"
+                                       value="$!{planConfigParamQo.paramName}" placeholder="请输入">
+                            </div>
+                        </div>
+                        <div class="col-sm-7 ">
+                            <label class="col-sm-8 text-right" for="">参数值:</label>
+                            <div class="col-sm-16 ">
+                                <input name="paramValue" class="form-control input-sm" type="text"
+                                       value="$!{planConfigParamQo.paramValue}" placeholder="请输入">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" name="pageNum" value="$!{planConfigParamQo.pageNum}">
+                        <input type="hidden" name="pageSize" value="$!{planConfigParamQo.pageSize}">
+                        <div class="col-sm-24  text-center btn-box">
+                            <button id="data-query" class="btn btn-sm btn-submit">查询</button>
+                            <input class=" btn btn-sm btn-reset" type="reset" value="重置"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="wlk-bottom">
+            <!--数据操作-->
+            <div class="query-operation">
+                <button id="data-add" class="btn btn-xs btn-add">增加</button>
+                #if($result.size() > 0)
+                <button id="data-delete-all" class="btn btn-xs btn-settings">删除</button>
+                #end
+            </div>
+
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table ">
+                    <thead>
+                    <tr>
+                        <th>
+                            <input class="check-all" type="checkbox">
+                        </th>
+                         <th>序号</th>
+                         <th>参数名</th>
+                         <th>参数值</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    #if($result.size() > 0)
+                    #foreach($planconfigParamVo in $result)
+                        <tr data-id="$!{planconfigParamVo.id}">
+                        <td>
+                            <input class="check-ls" type="checkbox">
+                        </td>
+                        <td>$!{velocityCount}</td>
+                        <td>$!{planconfigParamVo.paramName}</td>
+                        <td>$!{planconfigParamVo.paramValue}</td>
+                        <td>
+                            <a href="#" class="data-modify">修改</a>
+                            <a href="#" class="data-del">删除</a>
+                        </td>
+                    </tr>
+                    #end
+                    #else
+                    <tr>
+                        <td colspan="4">
+                            <div class="no-data text-center">
+                                <span><i class="iconfont icon-help"></i>没有数据</span>
+                            </div>
+                        </td>
+                    </tr>
+                    #end
+                    </tbody>
+                </table>
+                #set($pageUrl = "/planconfigParam/list")
+                #page(${result.getPageTools()} "#pluginLink($pageUrl)" "query-form")
+            </div>
+        </div>
+    </div>
+</section>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+<!--修改和新增弹出框内容-->
+<div id="modal-edit" style="display: none;">
+    <div class="modal-body">
+        <form id="form-edit" class="form-horizontal" action="">
+            <input type="text" name="id" class="hide">
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">参数名</label>
+                <div class="col-sm-18">
+                    <input type="text" name="paramName" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-4" for="">参数值</label>
+                <div class="col-sm-18">
+                    <input type="text" name="paramValue" class="form-control">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<input id="path" type="hidden" value="${rc.contextPath}">
+
+#parse("common/bottom-share-code.vm")
+<script type="text/javascript" src="${rc.contextPath}/src/js/planconfigparam.js"></script>
+</body>
+</html>
+

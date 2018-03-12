@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+    <title>Document</title>
+    <!-- font icon -->
+    <link rel="stylesheet" href="../../libs/font-welkin/css/iconfont.css">
+
+    <!-- bootstrap -->
+    <link rel="stylesheet" href="../../libs/bootstrap/3.3.4/css/bootstrap.css">
+
+    <!-- plugins stylesheets -->
+    <link rel="stylesheet" href="../../libs/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.css">
+    <link rel="stylesheet" href="../../libs/bootstrap-select/1.12.1/css/bootstrap-select.css"/>
+    <link rel="stylesheet" href="../../libs/animate/animate.min.css">
+
+    <!-- welkin stylesheet -->
+    <link rel="stylesheet" href="../styles/app.css">
+
+    <!--[if lt IE 9]>
+    <script src="../../libs/html5shiv.min.js"></script>
+    <script src="../../libs/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+
+<!-- header -->
+<header class="header">
+    <!--左侧菜单和logo部分-->
+    <div class="pull-left">
+        <!--导航菜单按钮-->
+        <div class="nav-menu pull-left" id="menu-drop"></div>
+        <!--项目logo-->
+        <div class="logo pull-left"></div>
+        <!--面包屑-->
+        <div class="break-nav">
+            <ol class="breadcrumb">
+            <li>当前位置：</li>
+            <li><a href="#">菜单</a></li>
+            <li class="active">作业监控</li>
+            </ol>
+        </div>
+    </div>
+    <div class="pull-right opt-box">
+        <!--搜索框-->
+        <div class="search pull-left hidden-xs hidden-sm">
+            <form action="" id="nav-search-input">
+                <input type="text" placeholder="请输入证件号">
+                <i class="iconfont serch-img icon-search "></i>
+                <input type="submit">
+            </form>
+        </div>
+        <!--操作按钮-->
+        <div class="btn-box pull-left hidden-xs">
+            <a class="to-home" href="">
+                <i class="iconfont icon-index"></i>
+            </a>
+            <div class="msg-tip">
+                <a class=" animated bounce" href="">
+                    <i class="iconfont icon-notice"></i>
+                </a>
+                <span class="new-msg">8</span>
+            </div>
+            <div class="dropdown user-settings ">
+                <a class=" dropdown-toggle" data-toggle="dropdown">
+                    <i class="iconfont icon-user"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-right animated flipInX" role="menu"
+                    aria-labelledby="user-manage">
+                    <li role="presentation">修改密码</li>
+                    <li class="divider"></li>
+                    <li role="presentation">
+                        用户:
+                        <span>teseter</span>
+                    </li>
+                    <li role="presentation">
+                        柜员号:
+                        <span>teseter</span>
+                    </li>
+                    <li role="presentation">
+                        岗位:
+                        <span>总行管理员</span>
+                    </li>
+                    <li role="presentation">
+                        机构:
+                        <span>杭州联合银行</span>
+                    </li>
+                </ul>
+            </div>
+            <a class="exit" href="">
+                <i class="iconfont icon-exit"></i>
+            </a>
+        </div>
+
+    </div>
+
+</header>
+
+<!-- body -->
+<section class="main ">
+    <div class="container-fluid work-control">
+        <div class="wlk-top">
+            <!--查询条件-->
+            <div class="row">
+                <form class="form-horizontal " action="">
+                    <div class="row row-ise">
+                        <div class="col-sm-8 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">计划名称:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm" type="text" placeholder="">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务开始起始时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm dtpicker" type="text" placeholder="请选择">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务开始终止时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm dtpicker" type="text" placeholder="请选择">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row row-ise">
+                        <div class="col-sm-8 ">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">状态属性:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle dpn-size" type="button"
+                                            id="dropdownMenu1" data-toggle="dropdown">
+                                        <span class="sel-val">完成</span>
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu sel-state" role="menu" aria-labelledby="dropdownMenu1">
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">完成</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">开始</a></li>
+                                        <li role="presentation"><a role="menuitem" tabindex="-1" href="#">进行中</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务结束起始时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm dtpicker" type="text" placeholder="请选择">
+                            </div>
+                        </div>
+                        <div class="col-sm-8">
+                            <label class="col-sm-13 col-md-11 col-lg-9 text-right" for="">任务结束终止时间:</label>
+                            <div class="col-sm-11 col-md-13 col-lg-15">
+                                <input class=" form-control input-sm dtpicker" type="text" placeholder="请选择">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-24 text-center btn-box">
+                            <button class="btn btn-sm btn-submit">查询</button>
+                            <input class=" btn btn-sm btn-reset" type="reset" value="重置"/>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+        <div class="wlk-bottom">
+            <!--数据操作-->
+            <div class="query-operation">
+                <button class="btn btn-xs btn-success restart">重新运行</button>
+                <button class="btn btn-xs btn-success">强制通过</button>
+                <button class="btn btn-xs btn-success">停止</button>
+                <button class="btn btn-xs btn-success">暂停</button>
+                <button class="btn btn-xs btn-success">继续运行</button>
+
+            </div>
+
+            <!--查询结果-->
+            <div class="qurey-result table-responsive">
+                <table class="table table-hover data-tb">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>计划名称</th>
+                        <th>作业名称</th>
+                        <th>运行主机</th>
+                        <th>状态</th>
+                        <th>任务开始时间</th>
+                        <th>任务结束时间</th>
+                        <th>任务运行用时</th>
+                        <th>运行日志</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>测试</td>
+                        <td>周数人</td>
+                        <td>127.1.0.1</td>
+                        <td>未完成</td>
+                        <td>2015-11－12 15:23:45</td>
+                        <td>2015-11－12 15:23:50</td>
+                        <td>00:00:05</td>
+                        <td>
+                            <a href="#" class="log-dtl">查看日志</a>
+
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>测试</td>
+                        <td>周数人</td>
+                        <td>127.1.0.1</td>
+                        <td>完成</td>
+                        <td>2015-11－12 15:23:45</td>
+                        <td>2015-11－12 15:23:50</td>
+                        <td>00:00:05</td>
+                        <td>
+                            <a href="#" class="log-dtl">查看日志</a>
+                        </td>
+                    </tr>
+                    </tbody>
+
+
+
+
+                </table>
+
+                <select class="selectpicker form-control" name="" id="" multiple>
+                    <option value="">1</option>
+                    <option value="">2</option>
+                    <option value="">3</option>
+                    <option value="">4</option>
+                    <option value="">5</option>
+                    <option value="">6</option>
+
+                </select>
+
+                <!--分页栏-->
+                分页栏
+            </div>
+        </div>
+
+    </div>
+
+</section>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <strong></strong>
+</div>
+
+<!--日志详情-->
+<div class="modal-log hide">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            Group is not existed.
+        </form>
+    </div>
+
+</div>
+
+<!--重新运行-->
+<div class="modal-restart hide">
+    <div class="modal-body">
+        <form class="form-horizontal" action="">
+            已重新开始
+        </form>
+    </div>
+
+</div>
+
+
+
+
+<script src="../../libs/jquery/1.9.1/jquery.js"></script>
+<script src="../../libs/bootstrap/3.3.4/js/bootstrap.js"></script>
+<script src="../../libs/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
+<script src="../../libs/bootstrap-datetimepicker-master/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="../../libs/bootstrap-select/1.12.1/js/bootstrap-select.js"></script>
+<script src="../../libs/layer/layer.js"></script>
+<script>
+    $(function () {
+        //日历选择
+        $('.dtpicker').datetimepicker({
+            language:'zh-CN',
+            format:'yyyy-mm-dd',
+            todayHighlight:true,
+            autoclose:true,
+            startView:2,
+            minView:2,
+            todayBtn:'linked'
+
+        });
+
+        //状态属性选择
+        $('.sel-state li').on('click', function () {
+            var val = $(this).text();
+            console.log(val);
+            $('.sel-val').text(val);
+        });
+
+        //table tr选中
+        $('.data-tb tbody tr').on('click', function () {
+            $(this).addClass('data-avtive').siblings().removeClass('data-avtive');
+        });
+
+        /*日志详情*/
+        $(".log-dtl").on("click", function () {
+
+            layer.open({
+                type: 1,
+                title: "日志详情",
+                area: "566px",
+                content: $(".modal-log").html(),
+                btn: ["关闭"],
+                yes: function (index) {
+                    layer.close(index)
+                }
+
+            })
+
+
+        });
+        
+        // 重新运行
+        $('.restart').on('click',function () {
+            var len = $('.data-tb tbody').children('.data-avtive').length;
+            console.log(len);
+            if (len == 0) {
+                errmsg("请先选择要重新运行的作业", 4000);
+            } else {
+                layer.open({
+                    type: 1,
+                    title: "提示信息",
+                    area: "566px",
+                    content: $(".modal-restart").html(),
+                    btn: ["关闭"],
+                    yes: function (index) {
+                        layer.close(index)
+                    }
+                });
+            }
+        })
+
+        /*设置错误提示信息自动消失方法*/
+        function errmsg(content, delay) {
+            $(".error-msg.alert").addClass("show");
+            $(".error-msg strong").text(content);
+            setTimeout(function () {
+                $(".error-msg.alert").removeClass("show");
+                $(".error-msg.alert").alert();
+            }, delay)
+
+        };
+
+    })
+</script>
+</body>
+</html>
+

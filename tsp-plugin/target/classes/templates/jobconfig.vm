@@ -1,0 +1,1287 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no"/>
+	<title>作业配置</title>
+	<!-- font icon -->
+	<link rel="stylesheet" href="${rc.contextPath}/libs/font-welkin/css/iconfont.css">
+
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="${rc.contextPath}/libs/bootstrap/3.3.4/css/bootstrap.css">
+
+	<!-- plugins stylesheets -->
+	<link rel="stylesheet" href="${rc.contextPath}/libs/zTree/3.5.27/css/zTreeStyle/zTreeStyle.css">
+
+	<!-- welkin stylesheet -->
+	<link rel="stylesheet" href="${rc.contextPath}/src/styles/app.css">
+
+	<!--[if lt IE 9]>
+	<script src="../../libs/html5shiv.min.js"></script>
+	<script src="../../libs/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+<body>
+
+##	#set($storeProDataBaseTypes=${DicTools.getDics("tsp.job.storepro.databasetype")})
+	#set($ktrKjbSelects=${DicTools.getDics("tsp.job.resource.type")})
+	#set($types=${DicTools.getDics("tsp.job.type")})
+<!-- body -->
+<section class="main-fullscreen-nonav">
+	<div class="container-fluid menu-manage tsp">
+
+		<div class="menu-mask"></div>
+
+		<div class="wlk-grail">
+
+			<!-- 具体内容 -->
+			<section class="wlk-container" id="menumanage-content">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class="btn-group menu-manage-btn">
+						</div>
+					</div>
+					<div class="panel-body js-result-container" data-height="auto">
+						<div class="table-responsive">
+							<table class="table table-condensed table-hover data-tb">
+								<thead>
+								<tr>
+									<th>参数名</th>
+									<th>参数值</th>
+								</tr>
+								</thead>
+								<tbody>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- 侧边栏树 -->
+			<aside class="wlk-aside" id="menumanage-aside">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<form class="form-inline" role="form" action="">
+							<div class="form-group">
+								<input class="form-control input-sm tree-search" type="text" placeholder="请输入关键字">
+								<button class="tree-btn tree-search-btn"></button>
+								<button class="tree-btn tree-unfold-btn"></button>
+								<button class="tree-btn tree-fold-btn"></button>
+							</div>
+						</form>
+					</div>
+					<div class="tree-container js-tree-container" data-height="auto">
+
+						<div class="tree-area ztree" id="job">
+						</div>
+
+
+						<button class="fold-btn" id="fold-btn">
+							<i class="iconfont icon-lfarrow"></i>
+						</button>
+					</div>
+
+					<!--根节点 右击菜单-->
+					<div class="root-menu">
+						<div class="fist-menu menu-box">
+							<ul class="tree-menu list-group">
+								<li class="list-group-item">
+									新增
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+                                            <li class="list-group-item new-task">任务</li>
+											<li class="list-group-item">
+												翻牌
+                                                <div class="secod-menu menu-box">
+                                                    <ul class="tree-menu list-group">
+                                                        <li class="list-group-item new-turnover">
+															周期翻牌
+														</li>
+													</ul>
+												</div>
+											</li>
+										</ul>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+
+					<!--翻牌-->
+                    <div class="child-menu turnover-menu">
+                        <div class="fist-menu menu-box">
+                            <ul class="tree-menu list-group">
+                                <li class="list-group-item tree-modify">
+                                    修改
+                                </li>
+                                <li class="list-group-item deletejob">
+                                    删除
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <!--子任务-->
+                    <div class="child-menu task-menu">
+                        <div class="fist-menu menu-box">
+                            <ul class="tree-menu list-group">
+                                <li class="list-group-item ">
+                                    新增工作
+                                    <div class="secod-menu menu-box">
+                                                    <ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item new-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+                                                    </ul>
+                                    </div>
+                                </li>
+                                <li class="list-group-item taskjob">
+                                    子任务
+                                </li>
+                                <li class="list-group-item">
+                                    依赖关系配置
+                                </li>
+                                <li class="list-group-item tree-modify">
+                                    修改
+                                </li>
+                                <li class="list-group-item deletejob">
+                                    删除
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+
+                    <!--普通作业 右击菜单-->
+					<div class="child-menu job-menu">
+						<div class="fist-menu menu-box">
+							<ul class="tree-menu list-group">
+								<li class="list-group-item">
+									新增_前
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+											<li class="list-group-item">
+												作业
+												<div class="thid-menu menu-box">
+													<ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item before-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+													</ul>
+												</div>
+											</li>
+											<li class="list-group-item before-parallel">并行</li>
+											<li class="list-group-item before-serial">串行</li>
+											<li class="list-group-item before-plan">计划</li>
+										</ul>
+									</div>
+								</li>
+								<li class="list-group-item">
+									新增后
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+											<li class="list-group-item">
+												作业
+												<div class="thid-menu menu-box">
+													<ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item after-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+##														<li class="list-group-item after-jar">可执行的java</li>
+##														<li class="list-group-item after-kjb">Kjb</li>
+##														<li class="list-group-item after-ktr">Ktr</li>
+##														<li class="list-group-item after-datastage">DataStage</li>
+##														<li class="list-group-item after-shell">Shell</li>
+##														<li class="list-group-item after-bat">Bat</li>
+##														<li class="list-group-item after-http">Http接口</li>
+##														<li class="list-group-item after-exe">exe</li>
+##														<li class="list-group-item after-storepro">存储过程</li>
+													</ul>
+												</div>
+											</li>
+											<li class="list-group-item after-parallel">并行</li>
+											<li class="list-group-item after-serial">串行</li>
+											<li class="list-group-item after-plan">计划</li>
+										</ul>
+									</div>
+								</li>
+								<li class="list-group-item tree-modify">
+									修改
+								</li>
+								<li class="list-group-item deletejob">
+									删除
+								</li>
+							</ul>
+						</div>
+
+					</div>
+
+					<!--串并行作业 右击菜单-->
+					<div class="child-parent-menu">
+						<div class="fist-menu menu-box">
+							<ul class="tree-menu list-group">
+								<li class="list-group-item">
+									新增_前
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+											<li class="list-group-item">
+												作业
+												<div class="thid-menu menu-box">
+													<ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item before-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+##														<li class="list-group-item before-jar">可执行的java
+##														</li>
+##														<li class="list-group-item before-kjb">Kjb</li>
+##														<li class="list-group-item before-ktr">Ktr</li>
+##														<li class="list-group-item before-datastage">DataStage</li>
+##														<li class="list-group-item before-shell">Shell</li>
+##														<li class="list-group-item before-bat">Bat</li>
+##														<li class="list-group-item before-http">Http接口</li>
+##														<li class="list-group-item before-exe">exe</li>
+##														<li class="list-group-item before-storepro">存储过程</li>
+													</ul>
+												</div>
+											</li>
+											<li class="list-group-item before-parallel">并行</li>
+											<li class="list-group-item before-serial">串行</li>
+											<li class="list-group-item before-plan">计划</li>
+										</ul>
+									</div>
+								</li>
+								<li class="list-group-item">
+									新增后
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+											<li class="list-group-item">
+												作业
+												<div class="thid-menu menu-box">
+													<ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item after-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+##														<li class="list-group-item after_jar">可执行的java</li>
+##														<li class="list-group-item after-kjb">Kjb</li>
+##														<li class="list-group-item after-ktr">Ktr</li>
+##														<li class="list-group-item after-datastage">DataStage</li>
+##														<li class="list-group-item after-shell">Shell</li>
+##														<li class="list-group-item after-bat">Bat</li>
+##														<li class="list-group-item after-http">Http接口</li>
+##														<li class="list-group-item after-exe">exe</li>
+##														<li class="list-group-item after-storepro">存储过程</li>
+													</ul>
+												</div>
+											</li>
+											<li class="list-group-item after-parallel">并行</li>
+											<li class="list-group-item after-serial">串行</li>
+											<li class="list-group-item after-plan">计划</li>
+										</ul>
+									</div>
+								</li>
+								<li class="list-group-item">
+									新增
+									<div class="secod-menu menu-box">
+										<ul class="tree-menu list-group">
+											<li class="list-group-item">
+												作业
+												<div class="thid-menu menu-box">
+													<ul class="tree-menu list-group">
+														#foreach($type in $types)
+                                                            <li class="list-group-item new-${type.dicKey}">$!{type.dicVal}</li>
+														#end
+##														<li class="list-group-item new-jar">可执行的java</li>
+##														<li class="list-group-item new-kjb">Kjb</li>
+##														<li class="list-group-item new-ktr">Ktr</li>
+##														<li class="list-group-item new-datastage">DataStage</li>
+##														<li class="list-group-item new-shell">Shell</li>
+##														<li class="list-group-item new-bat">Bat</li>
+##														<li class="list-group-item new-http">Http接口</li>
+##														<li class="list-group-item new-exe">exe</li>
+##														<li class="list-group-item new-storepro">存储过程</li>
+													</ul>
+												</div>
+											</li>
+											<li class="list-group-item new-parallel">并行</li>
+											<li class="list-group-item new-serial">串行</li>
+											<li class="list-group-item new-plan">计划</li>
+										</ul>
+									</div>
+								</li>
+								<li class="list-group-item deletejob">
+									删除
+								</li>
+							</ul>
+						</div>
+
+					</div>
+
+
+
+				</div>
+			</aside>
+
+		</div>
+
+	</div>
+</section>
+
+<!--菜单右键新增周期翻牌-->
+<div class="modal-modify modal-turnover" style="display: none">
+    <div class="modal-body">
+        <form class="form-horizontal" id="form_turnover" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-turnover" name="root"/>
+            <input type="text" class="hide" value="" id="type-turnover" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-turnover" name="planConfigId"/>
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">名称：</label>
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">运行参数：</label>
+
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">日期格式：</label>
+
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+                <div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <input type="reset" id="form_turnover_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增jar-->
+<div class="modal-modify modal-jaradd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_jaradd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-jar" name="root"/>
+            <input type="text" class="hide" value="" id="type-jar" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-jar" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="filePath">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">
+                    内存初始值(M)：
+                </label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="initialMemoryValue">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">内存最大值(M)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="120" name="maxMemoryValue">
+                </div>
+            </div>
+            <input type="reset" id="form_jar_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增kjb-->
+<div class="modal-modify modal-kjbadd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_kjbadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-kjb" name="root"/>
+            <input type="text" class="hide" value="" id="type-kjb" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-kjb" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">资源类型：</label>
+
+				<div class="col-sm-16">
+                    <select name="select" class="form-control selectkjb" >
+						#foreach($ktrKjbSelect in $ktrKjbSelects)
+                            <option value="${ktrKjbSelect.dicKey}">${ktrKjbSelect.dicVal}</option>
+						#end
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">资源库：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_rep" value="" name="rep">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">用户名：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_user" value="" name="user">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">密码：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_pass" value="" name="pass">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_dir" value="" name="dir">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">作业文件名：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_jobs" value="" name="jobs">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">本地文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control kjb_file" value="" name="file">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <input type="reset" id="form_kjb_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增ktr-->
+<div class="modal-modify modal-ktradd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_ktradd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-ktr" name="root"/>
+            <input type="text" class="hide" value="" id="type-ktr" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-ktr" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">资源类型：</label>
+
+				<div class="col-sm-16">
+                    <select name="select" class="form-control selectktr" >
+						#foreach($ktrKjbSelect in $ktrKjbSelects)
+                            <option value="${ktrKjbSelect.dicKey}">${ktrKjbSelect.dicVal}</option>
+						#end
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">资源库：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_rep" value="" name="rep">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">用户名：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_user" value="" name="user">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">密码：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_pass" value="" name="pass">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_dir" value="" name="dir">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">转换文件名：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_trans" value="" name="trans">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">本地文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control ktr_file" value="" name="file">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <input type="reset" id="form_ktr_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增datastage-->
+<div class="modal-modify modal-datastageadd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_datastageadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-datastage" name="root"/>
+            <input type="text" class="hide" value="" id="type-datastage" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-datastage" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">DS工程名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="dsProjectName">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">DS作业名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="dsJobName">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <input type="reset" id="form_datastage_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增shell-->
+<div class="modal-modify modal-shelladd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_shelladd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')"
+			  method="post">
+            <input type="text" class="hide" value="" id="root-shell" name="root"/>
+            <input type="text" class="hide" value="" id="type-shell" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-shell" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="filePath">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">正确返回值：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="0" name="returnValues">
+                </div>
+            </div>
+            <input type="reset" id="form_shell_reset" style="display:none;"/>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增bat-->
+<div class="modal-modify modal-batadd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_batadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-bat" name="root"/>
+            <input type="text" class="hide" value="" id="type-bat" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-bat" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="filePath">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+				<input type="reset" id="form_batadd_reset" style="display:none;"/>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增http-->
+<div class="modal-modify modal-httpadd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_httpadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-http" name="root"/>
+            <input type="text" class="hide" value="" id="type-http" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-http" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">Http的Url：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="httpUrl">
+                </div>
+				<input type="reset" id="form_httpadd_reset" style="display:none;"/>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增exe-->
+<div class="modal-modify modal-exeadd" style="display: none">
+    <div class="modal-body">
+		<form class="form-horizontal" id="form_exeadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-exe" name="root"/>
+            <input type="text" class="hide" value="" id="type-exe" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-exe" name="planConfigId"/>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="runParams">
+                </div>
+            </div>
+
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+                    <select name="ignoreErr" class="form-control" >
+                        <option value="2" selected>否</option>
+                        <option value="1">是</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="3" name="retryCnt">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="60" name="retrySec">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">文件路径：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="filePath">
+                </div>
+            </div>
+            <div class="form-group">
+				<label class="control-label col-sm-6" for="">正确返回值：</label>
+
+				<div class="col-sm-16">
+                    <input type="text" class="form-control" value="0" name="returnValues">
+                </div>
+				<input type="reset" id="form_exeadd_reset" style="display:none;"/>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<!--菜单右键新增storepro-->
+<div class="modal-modify modal-storeproadd" style="display: none">
+	<div class="modal-body">
+		<form class="form-horizontal" id="form_storeproadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+			<input type="text" class="hide" value="" id="root-storepro" name="root"/>
+			<input type="text" class="hide" value="" id="type-storepro" name="jobType"/>
+			<input type="text" class="hide" value="" id="planId-storepro" name="planConfigId"/>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="name">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">运行参数：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="runParams">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">日期格式：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="yyyy-MM-dd" name="timeFormat">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+					<select name="ignoreErr" class="form-control">
+						<option value="2" selected>否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试次数：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="3" name="retryCnt">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">失败重试时间(s)：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="60" name="retrySec">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">存储过程名字：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="procedureName">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6 ">数据库类型：</label>
+
+				<div class="col-sm-16">
+					<select name="dataBaseType" class="form-control">
+						<option value="0">oracle</option>
+						<option value="1">db2</option>
+						<option value="2">mysql</option>
+						<option value="3">postgresql</option>
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">数据库用户名：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="dataBaseUser">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">数据库密码：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="dataBasePwd">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">数据库连接Ip：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="dataBaseIp">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">数据库端口号：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="dataBasePort">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">数据库名字：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="dataBaseName">
+				</div>
+			</div>
+			<input type="reset" id="form_storeproadd_reset" style="display:none;"/>
+		</form>
+	</div>
+
+</div>
+
+<!--菜单右键新增并行任务-->
+<div class="modal-modify modal-paralleladd" style="display: none">
+	<div class="modal-body">
+		<form class="form-horizontal" id="form_paralleladd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+			<input type="text" class="hide" value="" id="root-parallel" name="root"/>
+			<input type="text" class="hide" value="" id="type-parallel" name="jobType"/>
+			<input type="text" class="hide" value="" id="planId-parallel" name="planConfigId"/>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="name">
+				</div>
+				<input type="reset" id="form_paralleladd_reset" style="display:none;"/>
+			</div>
+		</form>
+	</div>
+
+</div>
+
+<!--菜单右键新增子任务-->
+<div class="modal-modify modal-taskadd" style="display: none">
+    <div class="modal-body">
+        <form class="form-horizontal" id="form_taskadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+            <input type="text" class="hide" value="" id="root-task" name="root"/>
+            <input type="text" class="hide" value="" id="type-task" name="jobType"/>
+            <input type="text" class="hide" value="" id="planId-task" name="planConfigId"/>
+
+            <div class="form-group">
+                <label class="control-label col-sm-6" for="">名称：</label>
+
+                <div class="col-sm-16">
+                    <input type="text" class="form-control" value="" name="name">
+                </div>
+                <input type="reset" id="form_taskadd_reset" style="display:none;"/>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+
+
+<!--菜单右键新增串行任务-->
+<div class="modal-modify modal-serialadd" style="display: none">
+	<div class="modal-body">
+		<form class="form-horizontal" id="form_serialadd" action="#pluginLink('tsp/jobconfig/addnewjobconfig')" method="post">
+			<input type="text" class="hide" value="" id="root-serial" name="root"/>
+			<input type="text" class="hide" value="" id="type-serial" name="jobType"/>
+			<input type="text" class="hide" value="" id="planId-serial" name="planConfigId"/>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="name">
+				</div>
+				<input type="reset" id="form_serialadd_reset" style="display:none;"/>
+			</div>
+		</form>
+	</div>
+
+</div>
+
+<!--菜单右键新增计划 -->
+<div class="modal-modify modal-planadd" style="display: none">
+	<div class="modal-body">
+		<form class="form-horizontal" id="form_planadd" action="#pluginLink('tsp/jobconfig/addNewJob')" method="post">
+			<input type="text" class="hide" value="" id="root-plan" name="root"/>
+			<input type="text" class="hide" value="" id="type-plan" name="jobType"/>
+			<input type="text" class="hide" value="" id="planId-plan" name="planConfigId"/>
+			<input type="text" class="hide" value="" id="call-plan-config-name" name="callPlanConfigName"/>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6" for="">名称：</label>
+
+				<div class="col-sm-16">
+					<input type="text" class="form-control" value="" name="name">
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6 ">调用的计划：</label>
+
+				<div class="col-sm-16">
+					<select name="callPlanConfigId" id="call-plan-config-id" class="form-control">
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="control-label col-sm-6 ">是否忽略错误：</label>
+
+				<div class="col-sm-16">
+					<select name="ignoreErr" class="form-control">
+						<option value="2" selected>否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+			</div>
+			<input type="reset" id="form_planadd_reset" style="display:none;"/>
+		</form>
+	</div>
+
+</div>
+<!--错误提示信息-->
+<div class="alert alert-danger error-msg hide">
+	<button type="button" class="close" data-dismiss="alert">&times;</button>
+	<strong></strong>
+</div>
+<input id="planConfigId" type="hidden" value="${planConfigId}">
+<input type="hidden" id="path" value="#pluginLink('')">
+<input type="hidden" id="contextPath" value="${rc.contextPath}">
+
+<!--js-->
+
+	#parse("common/bottom-share-code.vm")
+<script src="${rc.contextPath}/libs/zTree/3.5.27/js/jquery.ztree.all.js"></script>
+<script src="${rc.contextPath}/libs/layer/layer.js"></script>
+##<script src="${rc.contextPath}/src/main.js"></script>
+<script src="${rc.contextPath}/src/js/jobconfig.js"></script>
+
+</body>
+</html>

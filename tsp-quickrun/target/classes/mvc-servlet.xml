@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd 
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+    http://www.springframework.org/schema/aop 
+	http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<context:property-placeholder location="classpath:application.properties" ignore-unresolvable="true"/>
+
+
+	<!-- 扫描设置 use-default-filters属性必须设置为false -->
+	<!-- ①：对web包中的所有类进行扫描，以完成Bean创建和自动依赖注入的功能 -->
+	<context:annotation-config/>
+
+	<!-- 扫描设置 use-default-filters属性必须设置为false -->
+	<context:component-scan base-package="com.sunyard.frameworkset.*" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<bean id="fapBeanPostProcessor" class="com.sunyard.frameworkset.web.springmvc.mvc.FapBeanPostProcessor"/>
+
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+		<property name="contentNegotiationManager">
+			<bean class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
+				<property name="ignoreAcceptHeader" value="true"/>
+				<property name="defaultContentType" value="text/html"/>
+			</bean>
+		</property>
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView">
+					<property name="objectMapper">
+						<bean class="com.fasterxml.jackson.databind.ObjectMapper">
+							<property name="serializationInclusion">
+								<value type="com.fasterxml.jackson.annotation.JsonInclude$Include">NON_NULL</value>
+							</property>
+						</bean>
+					</property>
+				</bean>
+
+				<!--<bean class="org.springframework.web.servlet.view.xml.MarshallingView">-->
+					<!--<property name="marshaller">-->
+						<!--<bean class="org.springframework.oxm.jaxb.Jaxb2Marshaller">-->
+							<!--<property name="classesToBeBound">-->
+								<!--<list>-->
+
+								<!--</list>-->
+							<!--</property>-->
+						<!--</bean>-->
+					<!--</property>-->
+				<!--</bean>-->
+			</list>
+		</property>
+
+		<property name="viewResolvers">
+			<list>
+				<ref bean="velocityViewResolver"/>
+			</list>
+		</property>
+	</bean>
+
+	<bean id="velocityConfigurer" class="org.springframework.web.servlet.view.velocity.VelocityConfigurer">
+		<property name="resourceLoaderPath" value="classpath:/templates"/>
+		<property name="configLocation" value="classpath:velocity.properties"/>
+	</bean>
+
+	<bean id="velocityViewResolver" class="org.springframework.web.servlet.view.velocity.VelocityViewResolver">
+		<property name="suffix" value=".vm"/>
+		<property name="prefix" value="/"/>
+		<property name="contentType" value="text/html;charset=UTF-8"/>
+		<property name="requestContextAttribute" value="rc"/>
+		<property name="toolboxConfigLocation" value="/WEB-INF/classes/toolbox.xml"/>
+	</bean>
+
+	<mvc:annotation-driven>
+		<!--<mvc:message-converters>-->
+			<!--<bean class="com.zjrcu.mcs.controller.JsonConverter"/>-->
+		<!--</mvc:message-converters>-->
+	</mvc:annotation-driven>
+
+	<!-- 解决直接输入项目跟路径访问 404 问题 -->
+	<mvc:resources location="classpath:/static/js/" mapping="/js/**"/>
+	<mvc:resources location="classpath:/static/images/" mapping="/images/**"/>
+	<mvc:resources location="classpath:/static/styles/" mapping="/styles/**"/>
+	<mvc:resources location="classpath:/static/libs/" mapping="/libs/**"/>
+	<mvc:resources location="classpath:/static/src/" mapping="/src/**"/>
+	<!--拦截器-->
+	<mvc:interceptors>
+			<bean class="com.sunyard.frameworkset.plugin.login.interceptor.SessionInterceptor"/>
+			<bean class="com.sunyard.frameworkset.web.springmvc.mvc.RunBinderMvcInterceptor"/>
+	</mvc:interceptors>
+
+</beans>
